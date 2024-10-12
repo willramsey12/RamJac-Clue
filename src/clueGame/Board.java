@@ -43,7 +43,7 @@ public class Board {
 		for(int i = 0; i < ROWS; i++) {
 			for(int j = 0; j < COLS; j++) {
 				if (i == 0) {
-					// adding cells to the ajacency lists
+					
 					grid[i][j].addAdjacency(grid[i+1][j]);
 				} else if (i == ROWS-1) {
 					grid[i][j].addAdjacency(grid[i-1][j]);
@@ -63,13 +63,43 @@ public class Board {
 		}
 	}
 	
-
-
+	public void calcTargets(BoardCell startCell, int pathlength) {
+		//calculates legal moves from startCell a distance of pathLength away
+		targets.clear();
+		visited.clear();
+		visited.add(startCell);
+		calcTargetsHelper(startCell, pathlength);
+	}
+	
+	public void calcTargetsHelper(BoardCell startCell, int pathlength) {
+		for(BoardCell adjCell : startCell.getAdjList()) {
+			if(!visited.contains(adjCell)) {
+				visited.add(adjCell);
+				if(pathlength == 1) {
+					if(!adjCell.getOccupied())
+						targets.add(adjCell);
+				} else {
+					if(adjCell.getRoom())
+						targets.add(adjCell);
+					calcTargetsHelper(adjCell, pathlength-1);
+				}
+				visited.remove(adjCell);
+			}
+		}
+	}
+	
 	public void setConfigFiles(String layout, String setUp) {
 		layConFile = layout;
 		setupConFile = setUp;
 	}
 	
+	public void loadLayoutConfig() {
+		
+	}
+	
+	public void loadSetupConfig() {
+		
+	}
 	
 	//get room based on a cell
 	public Room getRoom(BoardCell cell) {
@@ -97,5 +127,9 @@ public class Board {
 		return grid[row][col];
 	}
 	
-	
+	public Set<BoardCell> getTargets() {
+		//gets the targets created by calcTargets
+		return targets;
+	}
+
 }
