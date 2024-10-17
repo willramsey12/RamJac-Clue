@@ -1,0 +1,42 @@
+commit cd34973f5ae0c8944af943caa8559b0c52bcee4e
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 11 19:54:20 2024 -0600
+
+    changed some things arround, fixed errors in ExceptionsTests
+
+commit aafefc7bd43d2647a0a5d103e3458ceed3150bf3
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 11 19:52:20 2024 -0600
+
+    there are errors in exceptiontests, but i havent started working on those, and im not sure i have to
+
+commit 09816995a5db58816e5d408e4ae0d13ae5eea90c
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 11 19:04:07 2024 -0600
+
+    Got classes set up, now working on text logic
+
+commit cafd4e562282b3b8b3806d1c8fe45f48668892de
+Merge: 777c1d9 dee4b4b
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 10 13:33:53 2024 -0600
+
+    added the logic for calculate targets
+
+commit 777c1d9717ef2a82c71d1d7c03104eff839542a1
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 10 13:22:20 2024 -0600
+
+    about to pull
+
+commit dee4b4b7624c99bc13879b333e77abbb74e8dc19
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 10 13:17:48 2024 -0600
+
+    got logic donw for junit tests
+
+commit 3658c695dee3dab2e63fef4a0efe0dfbcabe3e30
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 10 12:47:54 2024 -0600
+
+    initial commit
