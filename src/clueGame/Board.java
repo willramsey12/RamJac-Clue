@@ -14,7 +14,7 @@ public class Board {
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
 
-    private static final int COLS = 24;
+    private static final int COLS = 25;
     private static final int ROWS = 25;
 
     private String layConFile;
@@ -62,16 +62,20 @@ public class Board {
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split(",");
                 // Check if the number of columns matches the expected number
+                //System.out.println(tokens.length);
                 if (tokens.length != COLS) {
+                	
                     throw new BadConfigFormatException("Number of columns does not match expected value at row " + row);
                 }
                 
                 //room validation
                 for (int col = 0; col < tokens.length; col++) {
                     String cellData = tokens[col].trim();
+                    //System.out.println("Raw cellData: '" + cellData + "' with length: " + cellData.length());
                     char initial = cellData.charAt(0);
                     
                     if (!roomMap.containsKey(initial)) {
+                    	//System.out.println("initial"+initial+"bitch");
                         throw new BadConfigFormatException("Room initial " + initial + " in layout not found in setup configuration.");
                     }
 
@@ -104,22 +108,22 @@ public class Board {
                             case '^':
                                 cell.setDoorDirection(DoorDirection.UP);
                                 cell.setDoorway(true);
-                                //System.out.println("Door at " + row + ", " + col + ": UP");
+                                System.out.println("Door at " + row + ", " + col + ": UP");
                                 break;
                             case 'v':
                                 cell.setDoorDirection(DoorDirection.DOWN);
                                 cell.setDoorway(true);
-                                //System.out.println("Door at " + row + ", " + col + ": DOWN");
+                                System.out.println("Door at " + row + ", " + col + ": DOWN");
                                 break;
                             case '<':
                                 cell.setDoorDirection(DoorDirection.LEFT);
                                 cell.setDoorway(true);
-                               // System.out.println("Door at " + row + ", " + col + ": LEFT");
+                                System.out.println("Door at " + row + ", " + col + ": LEFT");
                                 break;
                             case '>':
                                 cell.setDoorDirection(DoorDirection.RIGHT);
                                 cell.setDoorway(true);
-                                //System.out.println("Door at " + row + ", " + col + ": RIGHT");
+                                System.out.println("Door at " + row + ", " + col + ": RIGHT");
                                 break;
                             default:
                                 //System.out.println("Not a door at " + row + ", " + col);
@@ -129,7 +133,7 @@ public class Board {
                     
 
                     grid[row][col] = cell;
-                    System.out.println(cell);
+                    //System.out.println(cell);
                 }
                 row++;
             }
