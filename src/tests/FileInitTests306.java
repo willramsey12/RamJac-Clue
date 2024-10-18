@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import clueGame.BadConfigFormatException;
 import clueGame.Board;
 import clueGame.BoardCell;
 import clueGame.DoorDirection;
@@ -28,7 +29,7 @@ public class FileInitTests306 {
 	private static Board board;
 
 	@BeforeAll
-	public static void setUp() {
+	public static void setUp() throws BadConfigFormatException {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
@@ -60,20 +61,20 @@ public class FileInitTests306 {
 	// These cells are white on the planning spreadsheet
 	@Test
 	public void FourDoorDirections() {
-		BoardCell cell = board.getCell(8, 7);
-		assertTrue(cell.isDoorway());
-		assertEquals(DoorDirection.LEFT, cell.getDoorDirection());
-		cell = board.getCell(7, 12);
+		BoardCell cell = board.getCell(4, 6);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.UP, cell.getDoorDirection());
-		cell = board.getCell(4, 8);
+		cell = board.getCell(6, 17);
 		assertTrue(cell.isDoorway());
-		assertEquals(DoorDirection.RIGHT, cell.getDoorDirection());
-		cell = board.getCell(16, 9);
+		assertEquals(DoorDirection.UP, cell.getDoorDirection());
+		cell = board.getCell(8, 7);
+		assertTrue(cell.isDoorway());
+		assertEquals(DoorDirection.LEFT, cell.getDoorDirection());
+		cell = board.getCell(8, 17);
 		assertTrue(cell.isDoorway());
 		assertEquals(DoorDirection.DOWN, cell.getDoorDirection());
 		// Test that walkways are not doors
-		cell = board.getCell(12, 14);
+		cell = board.getCell(14, 7);
 		assertFalse(cell.isDoorway());
 	}
 	
@@ -85,9 +86,11 @@ public class FileInitTests306 {
 		for (int row = 0; row < board.getNumRows(); row++)
 			for (int col = 0; col < board.getNumColumns(); col++) {
 				BoardCell cell = board.getCell(row, col);
+				//System.out.println(cell);
 				if (cell.isDoorway())
 					numDoors++;
 			}
+		//System.out.println(numDoors);
 		Assert.assertEquals(17, numDoors);
 	}
 
@@ -97,6 +100,7 @@ public class FileInitTests306 {
 		// just test a standard room location
 		BoardCell cell = board.getCell( 23, 23);
 		Room room = board.getRoom( cell ) ;
+		System.out.println(cell);
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Kitchen" ) ;
 		assertFalse( cell.isLabel() );

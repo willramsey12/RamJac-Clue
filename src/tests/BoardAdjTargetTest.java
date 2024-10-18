@@ -1,9 +1,15 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Set;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import clueGame.BadConfigFormatException;
 import clueGame.Board;
 import clueGame.BoardCell;
 
@@ -12,9 +18,9 @@ public class BoardAdjTargetTest {
     private static Board board;
 
     @BeforeAll
-    public static void setUp() {
+    public static void setUp() throws BadConfigFormatException {
         board = Board.getInstance();
-        board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt"); // Update with your actual files
+        board.setConfigFiles("ClueBoardLayout.csv", "ClueSetup.txt"); // Update with your actual files
         board.initialize();
     }
 

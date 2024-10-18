@@ -14,8 +14,8 @@ public class Room {
 	 */
 	
 	public String getName() {
-		//return to clear errors for now
-		return "";
+		
+		return name;
 	}
 	
 	public void setName(String name) {
@@ -23,8 +23,8 @@ public class Room {
 	}
 
 	public BoardCell getCenterCell() {
-		//return to clear error for now
-		return null;
+		
+		return centerCell;
 	}
 	
 	public void setCenterCell(BoardCell centerCell) {

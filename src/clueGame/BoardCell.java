@@ -3,136 +3,143 @@ package clueGame;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BoardCell{
-	//Row and column variables
-	private int row;
-	private int col;
-	
-	//Cell info
-	private char initial;
-	private DoorDirection doorDirection;
-	private char secretPassage;
+public class BoardCell {
+    // Row and column variables
+    private int row;
+    private int col;
 
-	//Boolean status checkers
-	private boolean isRoom;
-	private boolean isOccupied;
-	private boolean doorway;
-	private boolean roomLabel;
-	private boolean roomCenter;
+    // Cell info
+    private char initial;  // Represents the type of room or space
+    private DoorDirection doorDirection;
+    private char secretPassage;
 
-	//Adjacency List
-	private Set<BoardCell> adjList = new HashSet<BoardCell>();
-	
-	//constructor to set row and col
-	public BoardCell(int rowNum, int colNum) {
-		row = rowNum;
-		col = colNum;
-	}
-	
-	//add cell to adjacency list
-	public void addAdjacency(BoardCell cell) {
-		if(!cell.isRoom)
-			adjList.add(cell);
-	}
-	
-	//getter for adjList
-	public Set<BoardCell> getAdjList() {
-		return adjList;
-	}
-	
-	//row getter
-	public int getRow() {
-		return row;
-	}
+    // Status flags
+    private boolean isRoom;
+    private boolean isOccupied;
+    private boolean isDoorway;
+    private boolean roomLabel;
+    private boolean roomCenter;
 
-	//row setter
-	public void setRow(int row) {
-		this.row = row;
-	}
+    // Adjacency List
+    private Set<BoardCell> adjList = new HashSet<>();
 
-	//column getter
-	public int getCol() {
-		return col;
-	}
+    // Constructor to set row and col
+    public BoardCell(int rowNum, int colNum, char init) {
+        this.row = rowNum;
+        this.col = colNum;
+        this.initial = init;
+    }
 
-	//column setter
-	public void setCol(int col) {
-		this.col = col;
-	}
+    // Add a cell to the adjacency list
+    public void addAdjacency(BoardCell cell) {
+        adjList.add(cell);
+    }
 
-	//room setter (sets to T or F)
-	public void setRoom(boolean roomSet) {
-		isRoom = roomSet;
-	}
-	
-	//returns T or F if a cell is a room or not
-	public boolean getRoom() {
-		if(isRoom) {
-			return true;
-		}
-		return false;
-	}
-	
-	//occupied setter (T or F)
-	public void setOccupied(boolean playerSet) {
-		isOccupied = playerSet;
-	}
-	
-	//if cell occupied, T; else F.
-	public boolean getOccupied() {
-		if(isOccupied) {
-			return true;
-		}
-		return false;
-	}
-	
-	//getter for secretPassage
-	public char getSecretPassage() {
-		return secretPassage;
-	}
+    // Getter for adjList
+    public Set<BoardCell> getAdjList() {
+        return adjList;
+    }
 
-	//setter for secretPassage
-	public void setSecretPassage(char secretPassage) {
-		this.secretPassage = secretPassage;
-	}
+    // Getters and setters for row and column
+    public int getRow() {
+        return row;
+    }
 
-	//getter for if a cell is a room label
-	public boolean isLabel() {
-		return roomLabel;
-	}
+    public void setRow(int row) {
+        this.row = row;
+    }
 
-	//setter for roomLabel
-	public void setRoomLabel(boolean roomLabel) {
-		this.roomLabel = roomLabel;
-	}
+    public int getCol() {
+        return col;
+    }
 
-	//getter for roomCenter
-	public boolean isRoomCenter() {
-		return roomCenter;
-	}
+    public void setCol(int col) {
+        this.col = col;
+    }
 
-	//setter for roomCenter
-	public void setRoomCenter(boolean roomCenter) {
-		this.roomCenter = roomCenter;
-	}
-	
-	//getter for doorway
-	public boolean isDoorway() {
-		return doorway;
-	}
+    // Room initial getter and setter
+    public char getInitial() {
+        return initial;
+    }
 
-	//setter for roomCenter
-	public void setDoorway(boolean doorway) {
-		this.doorway = roomCenter;
-	}
+    public void setInitial(char initial) {
+        this.initial = initial;
+    }
 
-	//getter for doorway direction
-	public Object getDoorDirection() {
-		return doorDirection;
-	}
-	
-	//setter for doorway direction
-	public void setDoorDirection(DoorDirection doorDirection) {
-		this.doorDirection = doorDirection;
-	}
+    // Room setter
+    public void setRoom(boolean roomSet) {
+        this.isRoom = roomSet;
+    }
+
+    // Is the cell a room?
+    public boolean isRoom() {
+        return isRoom;
+    }
+
+    // Is the cell occupied?
+    public boolean isOccupied() {
+        return isOccupied;
+    }
+
+    // Set the occupied status of the cell
+    public void setOccupied(boolean occupied) {
+        this.isOccupied = occupied;
+    }
+
+    // Getter for secretPassage
+    public char getSecretPassage() {
+        return secretPassage;
+    }
+
+    // Setter for secretPassage
+    public void setSecretPassage(char secretPassage) {
+        this.secretPassage = secretPassage;
+    }
+
+    // Is the cell a room label?
+    public boolean isLabel() {
+        return roomLabel;
+    }
+
+    // Set the cell as a room label
+    public void setRoomLabel(boolean roomLabel) {
+        this.roomLabel = roomLabel;
+    }
+
+    // Is the cell the center of a room?
+    public boolean isRoomCenter() {
+        return roomCenter;
+    }
+
+    // Set the cell as the center of a room
+    public void setRoomCenter(boolean roomCenter) {
+        this.roomCenter = roomCenter;
+    }
+
+    // Is the cell a doorway?
+    public boolean isDoorway() {
+        return isDoorway;
+    }
+
+    // Set the cell as a doorway
+    public void setDoorway(boolean doorway) {
+        this.isDoorway = doorway;
+    }
+
+    // Getter for doorway direction
+    public DoorDirection getDoorDirection() {
+        return doorDirection;
+    }
+
+    // Setter for doorway direction
+    public void setDoorDirection(DoorDirection doorDirection) {
+        this.doorDirection = doorDirection;
+    }
+
+    // Override toString to see what the hells going on
+    @Override
+    public String toString() {
+        return "BoardCell [row=" + row + ", col=" + col + ", initial=" + initial + ", isRoom=" + isRoom + 
+               ", isDoorway=" + isDoorway + ", roomCenter=" + roomCenter + ", roomLabel=" + roomLabel + "]";
+    }
 }

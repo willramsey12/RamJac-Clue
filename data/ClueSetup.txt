@@ -1,4 +1,4 @@
-\\ Rooms for clue game set up
+// Rooms for clue game set up
 Room, Hollowed Reliquary, R
 Room, Solitude Chamber, S
 Room, Eclipse Wing, E
@@ -8,6 +8,6 @@ Room, Obsidian Hall, O
 Room, Blighted Sepulcher, B
 Room, Gravewatch Bastion, G
 Room, Abyssal Vault, A
-\\ random other spaces on board
+// random other spaces on board
 Space, Unused, X
 Space, Walkway, W
