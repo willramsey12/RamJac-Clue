@@ -34,7 +34,7 @@ public class Board {
         this.setupConFile = CONFIG_DIRECTORY + setupFileName;
     }
 
-    // Singleton pattern - return the only instance
+    // Singleton pattern return the only instance
     public static Board getInstance() {
         return theInstance;
     }
@@ -138,7 +138,7 @@ public class Board {
         }
     }
 
-    // Load the setup configuration (e.g., ClueSetup.txt)
+    // Load the setup configuration
     public void loadSetupConfig() throws BadConfigFormatException {
         try (BufferedReader reader = new BufferedReader(new FileReader(setupConFile))) {
             String line;
@@ -156,8 +156,8 @@ public class Board {
                 }
                 
                 if (tokens[0].equals("Room") || tokens[0].equals("Space")) {
-                    char roomInitial = tokens[2].charAt(0);  // E.g., 'R'
-                    String roomName = tokens[1];             // E.g., "Hollowed Reliquary"
+                    char roomInitial = tokens[2].charAt(0);  
+                    String roomName = tokens[1];             
                     Room room = new Room();
                     room.setName(roomName);
                     roomMap.put(roomInitial, room);
@@ -185,7 +185,7 @@ public class Board {
         }
     }
 
-    // Calculate targets (legal moves) from a starting cell and a given path length
+    // Calculate targets from a starting cell and a given path length
     public void calcTargets(BoardCell startCell, int pathlength) {
         targets.clear();
         visited.clear();

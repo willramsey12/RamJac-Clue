@@ -136,7 +136,7 @@ public class BoardCell {
         this.doorDirection = doorDirection;
     }
 
-    // Override toString to provide useful information for debugging
+    // Override toString to see what the hells going on
     @Override
     public String toString() {
         return "BoardCell [row=" + row + ", col=" + col + ", initial=" + initial + ", isRoom=" + isRoom + 
