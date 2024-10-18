@@ -139,21 +139,31 @@ public class Board {
     }
 
     // Load the setup configuration (e.g., ClueSetup.txt)
-    public void loadSetupConfig() {
+    public void loadSetupConfig() throws BadConfigFormatException {
         try (BufferedReader reader = new BufferedReader(new FileReader(setupConFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("\\") || line.trim().isEmpty()) {
+                
+            	
+            	if (line.startsWith("//") || line.trim().isEmpty()) {
                     continue;  // Skip comments and empty lines
                 }
 
                 String[] tokens = line.split(", ");
+                
+                if (tokens.length != 3) {
+                    throw new BadConfigFormatException("Bad format in setup configuration: " + line);
+                }
+                
                 if (tokens[0].equals("Room") || tokens[0].equals("Space")) {
                     char roomInitial = tokens[2].charAt(0);  // E.g., 'R'
                     String roomName = tokens[1];             // E.g., "Hollowed Reliquary"
                     Room room = new Room();
                     room.setName(roomName);
                     roomMap.put(roomInitial, room);
+                }
+                else {
+                	throw new BadConfigFormatException("Unexpected room type in setup configuration: " + tokens[0]);
                 }
             }
         } catch (IOException e) {
