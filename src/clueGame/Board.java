@@ -13,6 +13,7 @@ public class Board {
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
+    private Set<BoardCell> adjList = new HashSet<>();
 
     private static final int COLS = 25;
     private static final int ROWS = 25;
@@ -241,5 +242,9 @@ public class Board {
     // Get the set of calculated targets
     public Set<BoardCell> getTargets() {
         return targets;
+    }
+    
+    public Set<BoardCell> getAdjList(int row, int col){
+    	return adjList;
     }
 }
