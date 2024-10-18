@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Board {
-    private BoardCell[][] grid;
+    private BoardCell[][] grid = new BoardCell[ROWS][COLS];
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
@@ -44,7 +44,7 @@ public class Board {
         if (layConFile == null || setupConFile == null) {
             throw new IllegalStateException("Configuration files are not set!");
         }
-        grid = new BoardCell[ROWS][COLS];
+        
         loadSetupConfig();  // Load the setup configuration first
         loadLayoutConfig(); // Then load the layout configuration
 
