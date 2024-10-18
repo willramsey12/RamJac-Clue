@@ -8,6 +8,7 @@ public class Board {
 	private BoardCell[][] grid;
 	private Set<BoardCell> targets = new HashSet<BoardCell>();
 	private Set<BoardCell> visited = new HashSet<BoardCell>();
+	private Set<BoardCell> adjList = new HashSet<BoardCell>();
 
 	final static int COLS = 24;
 	final static int ROWS = 25;
@@ -130,6 +131,12 @@ public class Board {
 	public Set<BoardCell> getTargets() {
 		//gets the targets created by calcTargets
 		return targets;
+	}
+
+	public Set<BoardCell> getAdjList(int row, int col) {
+		// TODO Auto-generated method stub
+		return adjList;
+		// need to actually the implemented adjacency list in this code for the next assignment. will work for C15A-2
 	}
 
 }
