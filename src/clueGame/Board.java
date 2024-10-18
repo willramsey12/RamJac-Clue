@@ -21,10 +21,17 @@ public class Board {
     private String setupConFile;
 
     private static Board theInstance = new Board();
+    private static final String CONFIG_DIRECTORY = "data/";
 
     // Private constructor to enforce singleton pattern
     private Board() {
         // No initialization in constructor
+    }
+    
+    public void setConfigFiles(String layoutFileName, String setupFileName) {
+        // Combine the relative directory and file name to create the path
+        this.layConFile = CONFIG_DIRECTORY + layoutFileName;
+        this.setupConFile = CONFIG_DIRECTORY + setupFileName;
     }
 
     // Singleton pattern - return the only instance
@@ -33,48 +40,55 @@ public class Board {
     }
 
     // Initialize the board after setting config files
-    public void initialize() {
+    public void initialize() throws BadConfigFormatException {
         if (layConFile == null || setupConFile == null) {
             throw new IllegalStateException("Configuration files are not set!");
         }
-
+        grid = new BoardCell[ROWS][COLS];
         loadSetupConfig();  // Load the setup configuration first
         loadLayoutConfig(); // Then load the layout configuration
 
         // Initialize adjacency lists for the grid
         initializeAdjacencyLists();
-    }
-
-    // Set the configuration files for layout and setup
-    public void setConfigFiles(String layout, String setUp) {
-        this.layConFile = layout;
-        this.setupConFile = setUp;
+        
     }
 
     // Load the layout configuration (e.g., ClueLayout.csv)
-    public void loadLayoutConfig() {
+    public void loadLayoutConfig() throws BadConfigFormatException {
         try (BufferedReader reader = new BufferedReader(new FileReader(layConFile))) {
             String line;
             int row = 0;
 
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split(",");
+                // Check if the number of columns matches the expected number
+                if (tokens.length != COLS) {
+                    throw new BadConfigFormatException("Number of columns does not match expected value at row " + row);
+                }
+                
+                //room validation
                 for (int col = 0; col < tokens.length; col++) {
                     String cellData = tokens[col].trim();
                     char initial = cellData.charAt(0);
+                    
+                    if (!roomMap.containsKey(initial)) {
+                        throw new BadConfigFormatException("Room initial " + initial + " in layout not found in setup configuration.");
+                    }
 
-                    BoardCell cell = new BoardCell(row, col);
+                    BoardCell cell = new BoardCell(row, col, initial);
 
                     // Handle room labels and center cells
                     if (cellData.contains("*")) {
                         cell.setRoomCenter(true);
                         Room room = getRoom(initial);
                         room.setCenterCell(cell);
+                        //System.out.println(cell);
                     }
                     if (cellData.contains("#")) {
                         cell.setRoomLabel(true);
                         Room room = getRoom(initial);
                         room.setLabelCell(cell);
+                        //System.out.println(cell);
                     }
 
                     // Handle secret passages
@@ -89,20 +103,33 @@ public class Board {
                         switch (doorChar) {
                             case '^':
                                 cell.setDoorDirection(DoorDirection.UP);
+                                cell.setDoorway(true);
+                                //System.out.println("Door at " + row + ", " + col + ": UP");
                                 break;
                             case 'v':
                                 cell.setDoorDirection(DoorDirection.DOWN);
+                                cell.setDoorway(true);
+                                //System.out.println("Door at " + row + ", " + col + ": DOWN");
                                 break;
                             case '<':
                                 cell.setDoorDirection(DoorDirection.LEFT);
+                                cell.setDoorway(true);
+                               // System.out.println("Door at " + row + ", " + col + ": LEFT");
                                 break;
                             case '>':
                                 cell.setDoorDirection(DoorDirection.RIGHT);
+                                cell.setDoorway(true);
+                                //System.out.println("Door at " + row + ", " + col + ": RIGHT");
+                                break;
+                            default:
+                                //System.out.println("Not a door at " + row + ", " + col);
                                 break;
                         }
                     }
+                    
 
                     grid[row][col] = cell;
+                    System.out.println(cell);
                 }
                 row++;
             }

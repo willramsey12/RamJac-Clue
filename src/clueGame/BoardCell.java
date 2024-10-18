@@ -24,9 +24,10 @@ public class BoardCell {
     private Set<BoardCell> adjList = new HashSet<>();
 
     // Constructor to set row and col
-    public BoardCell(int rowNum, int colNum) {
+    public BoardCell(int rowNum, int colNum, char init) {
         this.row = rowNum;
         this.col = colNum;
+        this.initial = init;
     }
 
     // Add a cell to the adjacency list
