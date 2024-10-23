@@ -13,9 +13,9 @@ public class Board {
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
-    private Set<BoardCell> adjList = new HashSet<>();
+    //private Set<BoardCell> adjList = new HashSet<>();
 
-    private static final int COLS = 25;
+    private static final int COLS = 24;
     private static final int ROWS = 25;
 
     private String layConFile;
@@ -50,7 +50,7 @@ public class Board {
         loadLayoutConfig(); // Then load the layout configuration
 
         // Initialize adjacency lists for the grid
-        initializeAdjacencyLists();
+        //initializeAdjacencyLists();
         
     }
 
@@ -95,11 +95,20 @@ public class Board {
                         room.setLabelCell(cell);
                         //System.out.println(cell);
                     }
+                    if (cellData.contains("W")) {
+                        cell.setWalk(true);
+                        
+                        //System.out.println(cell);
+                        
+                    }
 
                     // Handle secret passages
-                    if (cellData.length() == 2) {
-                        char secretPassage = cellData.charAt(1);
-                        cell.setSecretPassage(secretPassage);
+                    if (cellData.length() == 2 && Character.isLetter(cellData.charAt(1))) {
+                        char secondChar = cellData.charAt(1);
+                        if (roomMap.containsKey(secondChar)) {
+                            // If the second character is a valid room initial, it's a secret passage
+                            cell.setSecretPassage(secondChar);
+                        }
                     }
 
                     // Handle door directions
@@ -109,22 +118,22 @@ public class Board {
                             case '^':
                                 cell.setDoorDirection(DoorDirection.UP);
                                 cell.setDoorway(true);
-                                System.out.println("Door at " + row + ", " + col + ": UP");
+                                //System.out.println("Door at " + row + ", " + col + ": UP");
                                 break;
                             case 'v':
                                 cell.setDoorDirection(DoorDirection.DOWN);
                                 cell.setDoorway(true);
-                                System.out.println("Door at " + row + ", " + col + ": DOWN");
+                               // System.out.println("Door at " + row + ", " + col + ": DOWN");
                                 break;
                             case '<':
                                 cell.setDoorDirection(DoorDirection.LEFT);
                                 cell.setDoorway(true);
-                                System.out.println("Door at " + row + ", " + col + ": LEFT");
+                                //System.out.println("Door at " + row + ", " + col + ": LEFT");
                                 break;
                             case '>':
                                 cell.setDoorDirection(DoorDirection.RIGHT);
                                 cell.setDoorway(true);
-                                System.out.println("Door at " + row + ", " + col + ": RIGHT");
+                                //System.out.println("Door at " + row + ", " + col + ": RIGHT");
                                 break;
                             default:
                                 //System.out.println("Not a door at " + row + ", " + col);
@@ -176,20 +185,7 @@ public class Board {
         }
     }
 
-    // Initialize the adjacency lists for all cells
-    private void initializeAdjacencyLists() {
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                BoardCell cell = grid[i][j];
-                // Add adjacent cells for each grid cell
-                if (i > 0) cell.addAdjacency(grid[i - 1][j]);  // Above
-                if (i < ROWS - 1) cell.addAdjacency(grid[i + 1][j]);  // Below
-                if (j > 0) cell.addAdjacency(grid[i][j - 1]);  // Left
-                if (j < COLS - 1) cell.addAdjacency(grid[i][j + 1]);  // Right
-            }
-        }
-    }
-
+    
     // Calculate targets from a starting cell and a given path length
     public void calcTargets(BoardCell startCell, int pathlength) {
         targets.clear();
@@ -225,13 +221,17 @@ public class Board {
     }
 
     // Get number of rows
-    public int getNumRows() {
+    public  int getNumRows() {
         return ROWS;
     }
 
     // Get number of columns
-    public int getNumColumns() {
+    public  int getNumColumns() {
         return COLS;
+    }
+    
+    public BoardCell[][] getGrid() {
+    	return grid;
     }
 
     // Get a specific cell from the board
@@ -245,6 +245,6 @@ public class Board {
     }
     
     public Set<BoardCell> getAdjList(int row, int col){
-    	return adjList;
+    	return grid[row][col].getAdjList();
     }
 }
