@@ -110,7 +110,9 @@ public class Board {
                             cell.setSecretPassage(secondChar);
                         }
                     }
-
+                    if (roomMap.containsKey(initial) && initial != 'X' && initial != 'W') {
+                    	cell.setRoom(true);
+                    }
                     // Handle door directions
                     if (cellData.length() > 1) {
                         char doorChar = cellData.charAt(1);
@@ -143,7 +145,9 @@ public class Board {
                     
 
                     grid[row][col] = cell;
-                    //System.out.println(cell);
+                    System.out.println(cell);
+                    cell.setAdjacencyList();
+                    
                 }
                 row++;
             }
@@ -151,6 +155,13 @@ public class Board {
             System.err.println("Error loading layout configuration: " + e.getMessage());
         }
     }
+    
+//    public void initAdj() {
+//    	for (int row = 0; row < ROWS; row++) {
+//            for (int col = 0; col < COLS; col++) {
+//            }
+//    	}  
+//    }
 
     // Load the setup configuration
     public void loadSetupConfig() throws BadConfigFormatException {

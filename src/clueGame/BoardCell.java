@@ -20,6 +20,7 @@ public class BoardCell {
     private boolean isDoorway;
     private boolean roomLabel;
     private boolean roomCenter;
+    Board board = Board.getInstance();
 
     // Adjacency List
     private Set<BoardCell> adjList = new HashSet<>();
@@ -36,23 +37,21 @@ public class BoardCell {
         adjList.add(cell);
     }
     
-    public void setAdjacencyList(int row, int col) {
-        Board board = Board.getInstance();
+    public void setAdjacencyList() {
         BoardCell[][] grid = board.getGrid();
-        BoardCell cell = grid[row][col];
 
         // If the cell is a walkway, add adjacent walkways and doorways
         if (isWalkway) {
-            addAdjWalkDoor(grid, row - 1, col);  // Above
-            addAdjWalkDoor(grid, row + 1, col);  // Below
-            addAdjWalkDoor(grid, row, col - 1);  // Left
-            addAdjWalkDoor(grid, row, col + 1);  // Right
+            addAdjacentWalkwayOrDoor(grid, row - 1, col);  // Above
+            addAdjacentWalkwayOrDoor(grid, row + 1, col);  // Below
+            addAdjacentWalkwayOrDoor(grid, row, col - 1);  // Left
+            addAdjacentWalkwayOrDoor(grid, row, col + 1);  // Right
         }
 
-        // If the cell is the center of a room and has a secret passage, add the passage
+        // If the cell is the center of a room with a secret passage, add the passage
         if (isRoom && secretPassage != '\0') {
             BoardCell secretRoomCenter = board.getRoom(secretPassage).getCenterCell();
-            adjList.add(secretRoomCenter);  // Add the center of the secret passage destination room
+            if (secretRoomCenter != null) adjList.add(secretRoomCenter);
         }
 
         // If the cell is a doorway, add the adjacent walkway based on the door's direction
@@ -72,28 +71,26 @@ public class BoardCell {
                     break;
             }
         }
-        
-        // Print adjacency list for debugging
-        System.out.println(cell.getAdjList());
     }
 
-    private void addAdjWalkDoor(BoardCell[][] grid, int row, int col) {
+    // Helper to add adjacent walkways or doors
+    private void addAdjacentWalkwayOrDoor(BoardCell[][] grid, int row, int col) {
         // Ensure that row and col are within bounds
         if (row >= 0 && row < grid.length && col >= 0 && col < grid[0].length) {
             BoardCell adjacentCell = grid[row][col];
-            // Add the cell if it's a walkway or a doorway
-            if (adjacentCell.iswalk() || adjacentCell.isDoorway()) {
+            if (adjacentCell != null && (adjacentCell.iswalk() || adjacentCell.isDoorway())) {
                 adjList.add(adjacentCell);
             }
         }
     }
 
+    // Helper to add adjacent walkways only
     private void addAdjacentWalkway(BoardCell[][] grid, int row, int col) {
         // Ensure that row and col are within bounds
         if (row >= 0 && row < grid.length && col >= 0 && col < grid[0].length) {
             BoardCell adjacentCell = grid[row][col];
             // Only add the cell if it's a walkway
-            if (adjacentCell.iswalk()) {
+            if (adjacentCell != null && adjacentCell.iswalk()) {
                 adjList.add(adjacentCell);
             }
         }
@@ -215,4 +212,5 @@ public class BoardCell {
                ", roomLabel=" + roomLabel + ", isWalkway=" + isWalkway +
                ", secretPassage="+ secretPassage +"]";
     }
+    
 }
