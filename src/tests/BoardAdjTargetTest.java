@@ -28,10 +28,10 @@ public class BoardAdjTargetTest {
     @Test
     public void testAdjacencyWalkways() {
     	// Test walkway at (8,13) - should have adjacencies to all 4 directions (walkways only)
-		Set<BoardCell> testList = board.getAdjList(8, 13);
+		Set<BoardCell> testList = board.getAdjList(6, 10);
 		assertEquals(4, testList.size());
-		assertTrue(testList.contains(board.getCell(9, 13)));
-		assertTrue(testList.contains(board.getCell(8, 14)));
+		assertTrue(testList.contains(board.getCell(7, 10)));
+		assertTrue(testList.contains(board.getCell(6, 11)));
 
     }
 

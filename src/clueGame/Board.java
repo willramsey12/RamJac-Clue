@@ -13,7 +13,6 @@ public class Board {
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
-    //private Set<BoardCell> adjList = new HashSet<>();
 
     private static final int COLS = 24;
     private static final int ROWS = 25;
@@ -48,9 +47,6 @@ public class Board {
         
         loadSetupConfig();  // Load the setup configuration first
         loadLayoutConfig(); // Then load the layout configuration
-
-        // Initialize adjacency lists for the grid
-        //initializeAdjacencyLists();
         
     }
 
@@ -83,6 +79,12 @@ public class Board {
                     BoardCell cell = new BoardCell(row, col, initial);
 
                     // Handle room labels and center cells
+                    if (cellData.contains("X") || cellData.contains("W")) {
+                    	cell.setRoom(false);
+                    }
+                    else{
+                    	cell.setRoom(true);
+                    }
                     if (cellData.contains("*")) {
                         cell.setRoomCenter(true);
                         Room room = getRoom(initial);
@@ -95,20 +97,11 @@ public class Board {
                         room.setLabelCell(cell);
                         //System.out.println(cell);
                     }
-                    if (cellData.contains("W")) {
-                        cell.setWalk(true);
-                        
-                        //System.out.println(cell);
-                        
-                    }
 
                     // Handle secret passages
-                    if (cellData.length() == 2 && Character.isLetter(cellData.charAt(1))) {
-                        char secondChar = cellData.charAt(1);
-                        if (roomMap.containsKey(secondChar)) {
-                            // If the second character is a valid room initial, it's a secret passage
-                            cell.setSecretPassage(secondChar);
-                        }
+                    if (cellData.length() == 2) {
+                        char secretPassage = cellData.charAt(1);
+                        cell.setSecretPassage(secretPassage);
                     }
 
                     // Handle door directions
@@ -123,7 +116,7 @@ public class Board {
                             case 'v':
                                 cell.setDoorDirection(DoorDirection.DOWN);
                                 cell.setDoorway(true);
-                               // System.out.println("Door at " + row + ", " + col + ": DOWN");
+                                //System.out.println("Door at " + row + ", " + col + ": DOWN");
                                 break;
                             case '<':
                                 cell.setDoorDirection(DoorDirection.LEFT);
@@ -185,29 +178,19 @@ public class Board {
         }
     }
 
-    
     // Calculate targets from a starting cell and a given path length
     public void calcTargets(BoardCell startCell, int pathlength) {
-        targets.clear();
-        visited.clear();
-        visited.add(startCell);
-        calcTargetsHelper(startCell, pathlength);
+
     }
 
     // Recursive helper function to calculate targets
     private void calcTargetsHelper(BoardCell startCell, int pathlength) {
-        for (BoardCell adjCell : startCell.getAdjList()) {
-            if (!visited.contains(adjCell)) {
-                visited.add(adjCell);
-                if (pathlength == 1) {
-                    if (!adjCell.isOccupied()) targets.add(adjCell);
-                } else {
-                    if (adjCell.isRoom()) targets.add(adjCell);
-                    calcTargetsHelper(adjCell, pathlength - 1);
-                }
-                visited.remove(adjCell);
-            }
-        }
+
+    }
+    
+    public BoardCell getRoomCenter(char roomInitial) {
+        Room room = roomMap.get(roomInitial);
+        return room != null ? room.getCenterCell() : null;
     }
 
     // Retrieve the room associated with a BoardCell
@@ -221,17 +204,13 @@ public class Board {
     }
 
     // Get number of rows
-    public  int getNumRows() {
+    public int getNumRows() {
         return ROWS;
     }
 
     // Get number of columns
-    public  int getNumColumns() {
+    public int getNumColumns() {
         return COLS;
-    }
-    
-    public BoardCell[][] getGrid() {
-    	return grid;
     }
 
     // Get a specific cell from the board
@@ -245,6 +224,7 @@ public class Board {
     }
     
     public Set<BoardCell> getAdjList(int row, int col){
+    	System.out.println(grid[row][col].getAdjList());
     	return grid[row][col].getAdjList();
     }
 }
