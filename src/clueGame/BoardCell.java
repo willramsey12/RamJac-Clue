@@ -14,7 +14,6 @@ public class BoardCell {
     private char secretPassage;
 
     // Status flags
-    private boolean isWalkway;
     private boolean isRoom;
     private boolean isOccupied;
     private boolean isDoorway;
@@ -31,73 +30,31 @@ public class BoardCell {
         this.col = colNum;
         this.initial = init;
     }
+    
+    // Get the adjacency list, initializing it if needed
+    public Set<BoardCell> getAdjList() {
+    	calculateAdjList();
+        return adjList;
+    }
+    
+    private void calculateAdjList() {
+    	if (row < 24 && !((board.getCell(row+1,col)).isRoom())) {
+    		addAdjacency(board.getCell(row+1, col));
+    	}
+    	if (col < 23 && !((board.getCell(row,col+1)).isRoom())) {
+    		addAdjacency(board.getCell(row, col+1));
+    	}
+    	if (!((board.getCell(row-1,col)).isRoom())) {
+    		addAdjacency(board.getCell(row-1, col));
+    	}
+    	if (!((board.getCell(row,col-1)).isRoom())) {
+    		addAdjacency(board.getCell(row, col-1));
+    	}
+    }
 
     // Add a cell to the adjacency list
     public void addAdjacency(BoardCell cell) {
         adjList.add(cell);
-    }
-    
-    public void setAdjacencyList() {
-        BoardCell[][] grid = board.getGrid();
-
-        // If the cell is a walkway, add adjacent walkways and doorways
-        if (isWalkway) {
-            addAdjacentWalkwayOrDoor(grid, row - 1, col);  // Above
-            addAdjacentWalkwayOrDoor(grid, row + 1, col);  // Below
-            addAdjacentWalkwayOrDoor(grid, row, col - 1);  // Left
-            addAdjacentWalkwayOrDoor(grid, row, col + 1);  // Right
-        }
-
-        // If the cell is the center of a room with a secret passage, add the passage
-        if (isRoom && secretPassage != '\0') {
-            BoardCell secretRoomCenter = board.getRoom(secretPassage).getCenterCell();
-            if (secretRoomCenter != null) adjList.add(secretRoomCenter);
-        }
-
-        // If the cell is a doorway, add the adjacent walkway based on the door's direction
-        if (isDoorway) {
-            switch (doorDirection) {
-                case UP:
-                    addAdjacentWalkway(grid, row - 1, col);
-                    break;
-                case DOWN:
-                    addAdjacentWalkway(grid, row + 1, col);
-                    break;
-                case LEFT:
-                    addAdjacentWalkway(grid, row, col - 1);
-                    break;
-                case RIGHT:
-                    addAdjacentWalkway(grid, row, col + 1);
-                    break;
-            }
-        }
-    }
-
-    // Helper to add adjacent walkways or doors
-    private void addAdjacentWalkwayOrDoor(BoardCell[][] grid, int row, int col) {
-        // Ensure that row and col are within bounds
-        if (row >= 0 && row < grid.length && col >= 0 && col < grid[0].length) {
-            BoardCell adjacentCell = grid[row][col];
-            if (adjacentCell != null && (adjacentCell.iswalk() || adjacentCell.isDoorway())) {
-                adjList.add(adjacentCell);
-            }
-        }
-    }
-
-    // Helper to add adjacent walkways only
-    private void addAdjacentWalkway(BoardCell[][] grid, int row, int col) {
-        // Ensure that row and col are within bounds
-        if (row >= 0 && row < grid.length && col >= 0 && col < grid[0].length) {
-            BoardCell adjacentCell = grid[row][col];
-            // Only add the cell if it's a walkway
-            if (adjacentCell != null && adjacentCell.iswalk()) {
-                adjList.add(adjacentCell);
-            }
-        }
-    }
-    // Getter for adjList
-    public Set<BoardCell> getAdjList() {
-        return adjList;
     }
 
     // Getters and setters for row and column
@@ -134,14 +91,6 @@ public class BoardCell {
     // Is the cell a room?
     public boolean isRoom() {
         return isRoom;
-    }
-    
-    public boolean iswalk() {
-    	return isWalkway;
-    }
-    
-    public void setWalk(boolean set) {
-    	this.isWalkway = set;
     }
 
     // Is the cell occupied?
@@ -203,14 +152,12 @@ public class BoardCell {
     public void setDoorDirection(DoorDirection doorDirection) {
         this.doorDirection = doorDirection;
     }
-
+    
     // Override toString to see what the hells going on
     @Override
     public String toString() {
         return "BoardCell [row=" + row + ", col=" + col + ", initial=" + initial + ", isRoom=" + isRoom + 
-               ", isDoorway=" + isDoorway + ", roomCenter=" + roomCenter + 
-               ", roomLabel=" + roomLabel + ", isWalkway=" + isWalkway +
-               ", secretPassage="+ secretPassage +"]";
+               ", isDoorway=" + isDoorway + ", roomCenter=" + roomCenter + ", roomLabel=" + roomLabel + "]";
     }
     
 }
