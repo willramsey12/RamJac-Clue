@@ -13,7 +13,8 @@ public class Board {
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
-    //private Set<BoardCell> adjList = new HashSet<>();
+    private Set<BoardCell> adjList = new HashSet<>();
+    
 
     private static final int COLS = 24;
     private static final int ROWS = 25;
@@ -47,7 +48,8 @@ public class Board {
         }
         
         loadSetupConfig();  // Load the setup configuration first
-        loadLayoutConfig(); // Then load the layout configuration
+        loadLayoutConfig();
+        initializeAdjacencyLists();
 
         // Initialize adjacency lists for the grid
         //initializeAdjacencyLists();
@@ -156,12 +158,7 @@ public class Board {
         }
     }
     
-//    public void initAdj() {
-//    	for (int row = 0; row < ROWS; row++) {
-//            for (int col = 0; col < COLS; col++) {
-//            }
-//    	}  
-//    }
+
 
     // Load the setup configuration
     public void loadSetupConfig() throws BadConfigFormatException {
@@ -221,6 +218,59 @@ public class Board {
         }
     }
 
+    private void initializeAdjacencyLists() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                setAdjacencyList(grid[row][col]);
+            }
+        }
+    }
+    
+    private void setAdjacencyList(BoardCell cell) {
+        int row = cell.getRow();
+        int col = cell.getCol();
+
+        if (cell.iswalk()) {
+            addAdjacentWalkwayOrDoor(cell, row - 1, col);  // Above
+            addAdjacentWalkwayOrDoor(cell, row + 1, col);  // Below
+            addAdjacentWalkwayOrDoor(cell, row, col - 1);  // Left
+            addAdjacentWalkwayOrDoor(cell, row, col + 1);  // Right
+        }
+
+        if (cell.isRoom() && cell.getSecretPassage() != '\0') {
+            BoardCell secretRoomCenter = getRoom(cell.getSecretPassage()).getCenterCell();
+            if (secretRoomCenter != null) cell.addAdjacency(secretRoomCenter);
+        }
+
+        if (cell.isDoorway()) {
+            switch (cell.getDoorDirection()) {
+                case UP: addAdjacentWalkway(cell, row - 1, col); break;
+                case DOWN: addAdjacentWalkway(cell, row + 1, col); break;
+                case LEFT: addAdjacentWalkway(cell, row, col - 1); break;
+                case RIGHT: addAdjacentWalkway(cell, row, col + 1); break;
+            }
+        }
+    }
+
+    // Helper method to add adjacent walkways or doors
+    private void addAdjacentWalkwayOrDoor(BoardCell cell, int row, int col) {
+        if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+            BoardCell adjacentCell = grid[row][col];
+            if (adjacentCell != null && (adjacentCell.iswalk() || adjacentCell.isDoorway())) {
+                cell.addAdjacency(adjacentCell);
+            }
+        }
+    }
+
+    // Helper method to add adjacent walkways only
+    private void addAdjacentWalkway(BoardCell cell, int row, int col) {
+        if (row >= 0 && row < ROWS && col >= 0 && col < COLS) {
+            BoardCell adjacentCell = grid[row][col];
+            if (adjacentCell != null && adjacentCell.iswalk()) {
+                cell.addAdjacency(adjacentCell);
+            }
+        }
+    }
     // Retrieve the room associated with a BoardCell
     public Room getRoom(BoardCell cell) {
         return roomMap.get(cell.getInitial());
