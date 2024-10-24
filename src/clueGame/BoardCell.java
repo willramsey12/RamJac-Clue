@@ -14,12 +14,13 @@ public class BoardCell {
     private char secretPassage;
 
     // Status flags
+    private boolean isWalkway;
     private boolean isRoom;
     private boolean isOccupied;
     private boolean isDoorway;
     private boolean roomLabel;
     private boolean roomCenter;
-    Board board = Board.getInstance();
+    
 
     // Adjacency List
     private Set<BoardCell> adjList = new HashSet<>();
@@ -30,31 +31,16 @@ public class BoardCell {
         this.col = colNum;
         this.initial = init;
     }
-    
-    // Get the adjacency list, initializing it if needed
-    public Set<BoardCell> getAdjList() {
-    	calculateAdjList();
-        return adjList;
-    }
-    
-    private void calculateAdjList() {
-    	if (row < 24 && !((board.getCell(row+1,col)).isRoom())) {
-    		addAdjacency(board.getCell(row+1, col));
-    	}
-    	if (col < 23 && !((board.getCell(row,col+1)).isRoom())) {
-    		addAdjacency(board.getCell(row, col+1));
-    	}
-    	if (!((board.getCell(row-1,col)).isRoom())) {
-    		addAdjacency(board.getCell(row-1, col));
-    	}
-    	if (!((board.getCell(row,col-1)).isRoom())) {
-    		addAdjacency(board.getCell(row, col-1));
-    	}
-    }
 
     // Add a cell to the adjacency list
     public void addAdjacency(BoardCell cell) {
         adjList.add(cell);
+    }
+    
+    
+    // Getter for adjList
+    public Set<BoardCell> getAdjList() {
+        return adjList;
     }
 
     // Getters and setters for row and column
@@ -91,6 +77,14 @@ public class BoardCell {
     // Is the cell a room?
     public boolean isRoom() {
         return isRoom;
+    }
+    
+    public boolean iswalk() {
+    	return isWalkway;
+    }
+    
+    public void setWalk(boolean set) {
+    	this.isWalkway = set;
     }
 
     // Is the cell occupied?
@@ -152,11 +146,14 @@ public class BoardCell {
     public void setDoorDirection(DoorDirection doorDirection) {
         this.doorDirection = doorDirection;
     }
-    
+
     // Override toString to see what the hells going on
     @Override
     public String toString() {
         return "BoardCell [row=" + row + ", col=" + col + ", initial=" + initial + ", isRoom=" + isRoom + 
-               ", isDoorway=" + isDoorway + ", roomCenter=" + roomCenter + ", roomLabel=" + roomLabel + "]";
+               ", isDoorway=" + isDoorway + ", roomCenter=" + roomCenter + 
+               ", roomLabel=" + roomLabel + ", isWalkway=" + isWalkway +
+               ", secretPassage="+ secretPassage +"]";
     }
+    
 }
