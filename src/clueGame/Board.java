@@ -215,14 +215,31 @@ public class Board {
     }
 
     // Calculate targets from a starting cell and a given path length
-    public void calcTargets(BoardCell startCell, int pathlength) {
-
-    }
+	public void calcTargets(BoardCell startCell, int pathlength) {
+		//calculates legal moves from startCell a distance of pathLength away
+		targets.clear();
+		visited.clear();
+		visited.add(startCell);
+		calcTargetsHelper(startCell, pathlength);
+	}
 
     // Recursive helper function to calculate targets
-    private void calcTargetsHelper(BoardCell startCell, int pathlength) {
-
-    }
+	public void calcTargetsHelper(BoardCell startCell, int pathlength) {
+		for(BoardCell adjCell : startCell.getAdjList()) {
+			if(!visited.contains(adjCell)) {
+				visited.add(adjCell);
+				if(pathlength == 1) {
+					if(!adjCell.isOccupied())
+						targets.add(adjCell);
+				} else {
+					if(adjCell.isRoom())
+						targets.add(adjCell);
+					calcTargetsHelper(adjCell, pathlength-1);
+				}
+				visited.remove(adjCell);
+			}
+		}
+	}
     
     public BoardCell getRoomCenter(char roomInitial) {
         Room room = roomMap.get(roomInitial);
