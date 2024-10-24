@@ -223,23 +223,38 @@ public class Board {
 		calcTargetsHelper(startCell, pathlength);
 	}
 
-    // Recursive helper function to calculate targets
 	public void calcTargetsHelper(BoardCell startCell, int pathlength) {
-		for(BoardCell adjCell : startCell.getAdjList()) {
-			if(!visited.contains(adjCell)) {
-				visited.add(adjCell);
-				if(pathlength == 1) {
-					if(!adjCell.isOccupied())
-						targets.add(adjCell);
-				} else {
-					if(adjCell.isRoom())
-						targets.add(adjCell);
-					calcTargetsHelper(adjCell, pathlength-1);
-				}
-				visited.remove(adjCell);
-			}
-		}
+	    for (BoardCell adjCell : startCell.getAdjList()) {
+	        
+	        // Skip if it's already visited, unless it's an occupied room
+	        if (visited.contains(adjCell)) {
+	            continue;
+	        }
+
+	        // Skip if it's occupied and not a room
+	        if (adjCell.isOccupied() && !adjCell.isRoom()) {
+	            continue;
+	        }
+	        
+	        visited.add(adjCell);
+
+	        // Always allow movement into rooms, even if occupied
+	        if (adjCell.isRoom()) {
+	            targets.add(adjCell);
+	        }
+	        else if (pathlength == 1) {
+	            // Add cell if we're at the end of the path and it's not occupied
+	            targets.add(adjCell);
+	        }
+	        else {
+	            // Recursively calculate targets for further steps
+	            calcTargetsHelper(adjCell, pathlength - 1);
+	        }
+
+	        visited.remove(adjCell);  // Backtrack to explore other paths
+	    }
 	}
+    
     
     public BoardCell getRoomCenter(char roomInitial) {
         Room room = roomMap.get(roomInitial);
