@@ -148,7 +148,7 @@ public class Board {
 
                     grid[row][col] = cell;
                     System.out.println(cell);
-                    cell.setAdjacencyList();
+                    
                     
                 }
                 row++;
