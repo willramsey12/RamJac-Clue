@@ -16,12 +16,11 @@ public class Board {
     private Map<Character, Room> roomMap = new HashMap<>();
     private Map<Character, BoardCell> centerMap = new HashMap<>();
     private ArrayList<BoardCell> doors = new ArrayList<>();
-    private Map<Character, ArrayList<BoardCell>> doorsToCenter = new HashMap<>();
     private Map<Character, Character> secretPassages = new HashMap<>();
     
 
 
-    private static final int COLS = 24;
+    private static final int COLS = 25;
     private static final int ROWS = 25;
 
     private String layConFile;
@@ -168,7 +167,7 @@ public class Board {
                     
 
                     grid[row][col] = cell;
-                    //System.out.println(cell);
+                    System.out.println(cell);
                     
                     
                 }
@@ -290,7 +289,7 @@ public class Board {
     		grid[r][c].addAdjacency(grid[r+1][c]);
     	}
     	// to check cell below
-    	if ((r-1 > 0) && (grid[r-1][c].isDoorway() || grid[r-1][c].iswalk())) {
+    	if ((r-1 >= 0) && (grid[r-1][c].isDoorway() || grid[r-1][c].iswalk())) {
     		grid[r][c].addAdjacency(grid[r-1][c]);
     	}
     	// to check cell right
@@ -298,7 +297,7 @@ public class Board {
     		grid[r][c].addAdjacency(grid[r][c+1]);
     	}
     	// to check cell left
-    	if ((c-1 > 0) && (grid[r][c-1].isDoorway() || grid[r][c-1].iswalk())) {
+    	if ((c-1 >= 0) && (grid[r][c-1].isDoorway() || grid[r][c-1].iswalk())) {
     		grid[r][c].addAdjacency(grid[r][c-1]);
     	}
     }
@@ -392,6 +391,7 @@ public class Board {
     }
     
     public Set<BoardCell> getAdjList(int row, int col){
+    	//System.out.println(grid[row][col].getAdjList());
     	return grid[row][col].getAdjList();
     }
 }
