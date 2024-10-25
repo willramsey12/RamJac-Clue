@@ -20,7 +20,7 @@ public class Board {
     
 
 
-    private static final int COLS = 24;
+    private static final int COLS = 25;
     private static final int ROWS = 25;
 
     private String layConFile;
