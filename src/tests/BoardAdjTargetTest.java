@@ -105,22 +105,176 @@ public class BoardAdjTargetTest {
 
     // Test target calculations for walkways
     @Test
-    public void testTargetsAlongWalkways() {
-
+    public void testTargetsAlongWalkways() {  	   	
+    	
+    	// only going to other walkways
+    	// roll of 1
+    	board.calcTargets(board.getCell(5, 0), 1);
+		Set<BoardCell> targets= board.getTargets();
+		assertEquals(1, targets.size());
+		assertTrue(targets.contains(board.getCell(5, 1)));
+		// roll of 2
+		board.calcTargets(board.getCell(5, 0), 2);
+		targets = board.getTargets();
+		assertEquals(3, targets.size());
+		assertTrue(targets.contains(board.getCell(4, 1)));
+		assertTrue(targets.contains(board.getCell(6, 1)));
+		assertTrue(targets.contains(board.getCell(5, 2)));
+		assertFalse(targets.contains(board.getCell(5, 1)));
+		// roll of 3
+		// going from a walkway to a doorway
+		board.calcTargets(board.getCell(5, 0), 3);
+		targets = board.getTargets();
+		assertEquals(3, targets.size());
+		assertTrue(targets.contains(board.getCell(4, 2)));
+		assertTrue(targets.contains(board.getCell(6, 2)));
+		assertTrue(targets.contains(board.getCell(5, 3)));
+		assertFalse(targets.contains(board.getCell(5, 2)));
+    	
+    	
+    	// going to other walkways with occupied spaces
+		board.getCell(5, 1).setOccupied(true);
+		board.calcTargets(board.getCell(5, 0), 3);
+		board.getCell(5, 1).setOccupied(false);
+		targets = board.getTargets();
+		assertEquals(0, targets.size());
+		assertFalse(targets.contains(board.getCell(5, 3)));
     }
     
     @Test
     public void testTargetsEnterRoom() {
+    	
+    	// entering horizon suite
+    	// from 2,16 with a roll of 2
+    	board.calcTargets(board.getCell(2, 16), 2);
+		Set<BoardCell> targets= board.getTargets();
+		assertEquals(6, targets.size());
+    	assertTrue(targets.contains(board.getCell(2, 20)));
+    	assertTrue(targets.contains(board.getCell(1, 15)));
+    	assertTrue(targets.contains(board.getCell(3, 15)));
+    	assertTrue(targets.contains(board.getCell(1, 17)));
+    	assertTrue(targets.contains(board.getCell(3, 17)));
+    	assertTrue(targets.contains(board.getCell(4, 16)));
+    	// entering hollowed reliquary
+    	// from 4,2 with a roll of 1
+    	board.calcTargets(board.getCell(4, 2), 1);
+		targets= board.getTargets();
+		assertEquals(4, targets.size());
+    	assertTrue(targets.contains(board.getCell(2, 3)));
+    	assertTrue(targets.contains(board.getCell(4, 1)));
+    	assertTrue(targets.contains(board.getCell(4, 3)));
+    	assertTrue(targets.contains(board.getCell(5, 2)));
+    	// entering hollowed reliquary or solitude chamber
+    	// from (5,2) with a roll of 2
+    	board.calcTargets(board.getCell(5, 2), 2);
+		targets= board.getTargets();
+		assertEquals(8, targets.size());
+    	assertTrue(targets.contains(board.getCell(5, 0)));
+    	assertTrue(targets.contains(board.getCell(4, 1)));
+    	assertTrue(targets.contains(board.getCell(6, 1)));
+    	assertTrue(targets.contains(board.getCell(4, 3)));
+    	assertTrue(targets.contains(board.getCell(2, 3)));
+    	assertTrue(targets.contains(board.getCell(6, 3)));
+    	assertTrue(targets.contains(board.getCell(11, 1)));
+    	assertTrue(targets.contains(board.getCell(5, 4)));
+    	// entering hollowed reliquary when someone is already in there
+    	board.getCell(2, 3).setOccupied(true);
+    	board.calcTargets(board.getCell(4, 2), 1);
+    	board.getCell(2, 3).setOccupied(false);
+		targets= board.getTargets();
+		assertEquals(4, targets.size());
+    	assertTrue(targets.contains(board.getCell(2, 3)));
+    	assertTrue(targets.contains(board.getCell(4, 1)));
+    	assertTrue(targets.contains(board.getCell(4, 3)));
+    	assertTrue(targets.contains(board.getCell(5, 2)));
+    	// entering a hollowed reliquary or solitude chamber that has a doorway blocked in front of hollowed reliquary
+    	// from (5,2) with a roll of 2
+    	board.getCell(4, 2).setOccupied(true);
+    	board.calcTargets(board.getCell(5, 2), 2);
+    	board.getCell(4, 2).setOccupied(false);
+		targets= board.getTargets();
+		assertEquals(7, targets.size());
+    	assertTrue(targets.contains(board.getCell(5, 0)));
+    	assertTrue(targets.contains(board.getCell(4, 1)));
+    	assertTrue(targets.contains(board.getCell(6, 1)));
+    	assertTrue(targets.contains(board.getCell(4, 3)));
+    	assertFalse(targets.contains(board.getCell(2, 3)));
+    	assertTrue(targets.contains(board.getCell(6, 3)));
+    	assertTrue(targets.contains(board.getCell(11, 1)));
+    	assertTrue(targets.contains(board.getCell(5, 4)));
 
     }
     
     @Test
     public void testTargetsLeaveRoomNoSecretPassage() {
-
+    	
+    	// leaving a room that has 0/2 doorways blocked
+    	// from Gravewatch Bastion with a roll of 2
+    	board.calcTargets(board.getCell(16, 21), 2);
+		Set<BoardCell> targets= board.getTargets();
+		assertEquals(6, targets.size());
+    	assertTrue(targets.contains(board.getCell(15, 18)));
+    	assertTrue(targets.contains(board.getCell(17, 18)));
+    	assertTrue(targets.contains(board.getCell(16, 17)));
+    	assertTrue(targets.contains(board.getCell(15, 17)));
+    	assertTrue(targets.contains(board.getCell(14, 18)));
+    	assertTrue(targets.contains(board.getCell(16, 18)));
+    	
+    	// leaving a room that has 1/2 doorways blocked
+    	board.getCell(16, 18).setOccupied(true);
+    	board.calcTargets(board.getCell(16, 21), 2);
+    	board.getCell(16, 18).setOccupied(false);
+		targets= board.getTargets();
+		assertEquals(2, targets.size());
+    	assertFalse(targets.contains(board.getCell(15, 18)));
+    	assertFalse(targets.contains(board.getCell(17, 18)));
+    	assertFalse(targets.contains(board.getCell(16, 17)));
+    	assertTrue(targets.contains(board.getCell(15, 17)));
+    	assertTrue(targets.contains(board.getCell(14, 18)));
+    	assertFalse(targets.contains(board.getCell(16, 18)));
+    	
+    	// leaving a room that has 2/2 doorways blocked
+    	board.getCell(16, 18).setOccupied(true);
+    	board.getCell(15, 18).setOccupied(true);
+    	board.calcTargets(board.getCell(16, 21), 2);
+    	board.getCell(16, 18).setOccupied(false);
+    	board.getCell(15, 18).setOccupied(false);
+		targets= board.getTargets();
+		assertEquals(0, targets.size());
+    	assertFalse(targets.contains(board.getCell(15, 18)));
+    	assertFalse(targets.contains(board.getCell(17, 18)));
+    	assertFalse(targets.contains(board.getCell(16, 17)));
+    	assertFalse(targets.contains(board.getCell(15, 17)));
+    	assertFalse(targets.contains(board.getCell(14, 18)));
+    	assertFalse(targets.contains(board.getCell(16, 18)));
     }
 
     @Test
     public void testTargetsLeaveRoomWithSecretPassage() {
+    	
+    	// leaving Blighted Sepulcher which has a secret passage
+    	// roll of 1 since we already checked doorway and walkway functionality
+    	board.calcTargets(board.getCell(20, 11), 1);
+		Set<BoardCell> targets= board.getTargets();
+		assertEquals(4, targets.size());
+    	assertTrue(targets.contains(board.getCell(3, 11)));
+    	assertTrue(targets.contains(board.getCell(18, 7)));
+    	assertTrue(targets.contains(board.getCell(18, 15)));
+    	assertTrue(targets.contains(board.getCell(15, 11)));
+    	// leaving the room but doors are blocked
+    	board.getCell(18, 7).setOccupied(true);
+    	board.getCell(18, 15).setOccupied(true);
+    	board.getCell(15, 11).setOccupied(true);
+    	board.calcTargets(board.getCell(20, 11), 1);
+    	board.getCell(18, 7).setOccupied(false);
+    	board.getCell(18, 15).setOccupied(false);
+    	board.getCell(15, 11).setOccupied(false);
+        targets= board.getTargets();
+		assertEquals(1, targets.size());
+    	assertTrue(targets.contains(board.getCell(3, 11)));
+    	assertFalse(targets.contains(board.getCell(18, 7)));
+    	assertFalse(targets.contains(board.getCell(18, 15)));
+    	assertFalse(targets.contains(board.getCell(15, 11)));
 
     }
 
