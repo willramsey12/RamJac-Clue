@@ -1,0 +1,49 @@
+*   e8b20ab Merge branch 'main' of https://github.com/willramsey12/RamJac-Clue (3 days ago) <Claytontj>
+|\  
+| * 0eddb51 changed the board initialization to work for our board instead (4 days ago) <willramsey12>
+| * dcf0b36 done with adjacency and target tests for our board and 306 board. everything works lfg (4 days ago) <willramsey12>
+| * c6889d6 Done with our boards Adjacency tests (4 days ago) <willramsey12>
+* | 886c22b fixed excel file-csv (4 days ago) <Claytontj>
+|/  
+* c4e7c44 finished with all the tests, just need to refactor now (4 days ago) <Claytontj>
+* b39d29b got somoe of the targeting tests to work (5 days ago) <Claytontj>
+*   333b8b0 merged with main (5 days ago) <willramsey12>
+|\  
+| * 1b6f05e finished the adjacency tests (5 days ago) <willramsey12>
+| | * 3e39e22 dont know why im commiting this (5 days ago) <Claytontj>
+| |/  
+| * 0cfc25a IO branch update (5 days ago) <Claytontj>
+| * bc46dbb all in board now (5 days ago) <Claytontj>
+| | * 6e5e452 merged (5 days ago) <Claytontj>
+| |/| 
+| |/  
+|/|   
+* | 0970ea7 pulling (5 days ago) <willramsey12>
+| * f42f9b2 got some other stuff to work, tests still dont work (5 days ago) <Claytontj>
+|/  
+* b8062b1 fixed some issues with assigning secret passages (5 days ago) <Claytontj>
+* 559b764 implementing logic for the tests adj and target tests (5 days ago) <willramsey12>
+* 50b1b51 finished starting the AdjTargetTests (11 days ago) <willramsey12>
+* d75afb0 comitting (11 days ago) <Claytontj>
+* ceb615d just finiched doing the tests for our own set up files (11 days ago) <Claytontj>
+| *   41015ac re pulling (11 days ago) <willramsey12>
+| |\  
+| |/  
+|/|   
+* | 5c8a809 fixed comments (11 days ago) <Claytontj>
+* | ac73032 all tests passed (11 days ago) <Claytontj>
+* | 1dc257e going to merge (11 days ago) <Claytontj>
+* | 4d3b638 Got the file init tests passed (11 days ago) <Claytontj>
+* | ebe7d09 file io tests (11 days ago) <Claytontj>
+| * e32b67e all the new tests implemented (11 days ago) <willramsey12>
+| * 018cdb5 new branch made for C15A-2 (12 days ago) <willramsey12>
+|/  
+* cd34973 changed some things arround, fixed errors in ExceptionsTests (2 weeks ago) <Claytontj>
+* aafefc7 there are errors in exceptiontests, but i havent started working on those, and im not sure i have to (2 weeks ago) <Claytontj>
+* 0981699 Got classes set up, now working on text logic (2 weeks ago) <Claytontj>
+*   cafd4e5 added the logic for calculate targets (3 weeks ago) <willramsey12>
+|\  
+| * dee4b4b got logic donw for junit tests (3 weeks ago) <Claytontj>
+* | 777c1d9 about to pull (3 weeks ago) <willramsey12>
+|/  
+* 3658c69 initial commit (3 weeks ago) <willramsey12>

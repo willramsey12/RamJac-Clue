@@ -20,7 +20,7 @@ public class Board {
     
 
 
-    private static final int COLS = 25;
+    private static final int COLS = 24;
     private static final int ROWS = 25;
 
     private String layConFile;
@@ -54,10 +54,6 @@ public class Board {
         loadSetupConfig();  // Load the setup configuration first
         loadLayoutConfig();
         initializeAdjacencyLists();
-
-        // Initialize adjacency lists for the grid
-        //initializeAdjacencyLists();
-        
     }
 
     // Load the layout configuration (e.g., ClueLayout.csv)
@@ -69,7 +65,6 @@ public class Board {
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split(",");
                 // Check if the number of columns matches the expected number
-                //System.out.println(tokens.length);
                 if (tokens.length != COLS) {
                 	
                     throw new BadConfigFormatException("Number of columns does not match expected value at row " + row);
@@ -78,96 +73,18 @@ public class Board {
                 //room validation
                 for (int col = 0; col < tokens.length; col++) {
                     String cellData = tokens[col].trim();
-                    //System.out.println("Raw cellData: '" + cellData + "' with length: " + cellData.length());
                     char initial = cellData.charAt(0);
                     
                     if (!roomMap.containsKey(initial)) {
-                    	//System.out.println("initial"+initial+"bitch");
                         throw new BadConfigFormatException("Room initial " + initial + " in layout not found in setup configuration.");
                     }
 
                     BoardCell cell = new BoardCell(row, col, initial);
+                    //function to set up room initial, center, if secret passage, and other thing contained in the csv file
+                    setUpRoom(cellData,  initial,  cell);
 
-                    // Handle room labels and center cells
-                    if (cellData.contains("X") || cellData.contains("W")) {
-                    	cell.setRoom(false);
-                    }
-                    else{
-                    	cell.setRoom(true);
-                    }
-                    if (cellData.contains("*")) {
-                        cell.setRoomCenter(true);
-                        Room room = getRoom(initial);
-                        room.setCenterCell(cell);
-                        centerMap.put(initial, cell);
-                        //System.out.println(cell);
-                    }
-                    if (cellData.contains("#")) {
-                        cell.setRoomLabel(true);
-                        Room room = getRoom(initial);
-                        room.setLabelCell(cell);
-                        //System.out.println(cell);
-                    }
-
-                    if (cellData.contains("W") && cellData.length() == 1) {
-                        cell.setWalk(true);
-                        
-                        //System.out.println(cell);
-                        
-                    }
-
-                    // Handle secret passages
-                    if (cellData.length() == 2 && Character.isLetter(cellData.charAt(1))) {
-                        char secondChar = cellData.charAt(1);
-                        if (roomMap.containsKey(secondChar)) {
-                            // If the second character is a valid room initial, it's a secret passage
-                            cell.setSecretPassage(secondChar);
-                        }
-                        secretPassages.put(initial, secondChar);
-                    }
-                    
-                    // Handle rooms
-                    if (roomMap.containsKey(initial) && initial != 'X' && initial != 'W') {
-                    	cell.setRoom(true);
-                    }
-                    // Handle door directions
-                    if (cellData.length() > 1 && cellData.contains("W")) {
-                        char doorChar = cellData.charAt(1);
-                        doors.add(cell);
-                        switch (doorChar) {
-                            case '^':
-                                cell.setDoorDirection(DoorDirection.UP);
-                                cell.setDoorway(true);
-                       
-                                //System.out.println("Door at " + row + ", " + col + ": UP");
-                                break;
-                            case 'v':
-                                cell.setDoorDirection(DoorDirection.DOWN);
-                                cell.setDoorway(true);
-
-                               // System.out.println("Door at " + row + ", " + col + ": DOWN");
-                                break;
-                            case '<':
-                                cell.setDoorDirection(DoorDirection.LEFT);
-                                cell.setDoorway(true);
-
-                                //System.out.println("Door at " + row + ", " + col + ": LEFT");
-                                break;
-                            case '>':
-                                cell.setDoorDirection(DoorDirection.RIGHT);
-                                cell.setDoorway(true);
-
-                                //System.out.println("Door at " + row + ", " + col + ": RIGHT");
-                                break;
-                            default:
-                                //System.out.println("Not a door at " + row + ", " + col);
-                                break;
-                        }
-                    }
-                    
-
+          
                     grid[row][col] = cell;
-                    //System.out.println(cell);
                     
                     
                 }
@@ -175,6 +92,78 @@ public class Board {
             }
         } catch (IOException e) {
             System.err.println("Error loading layout configuration: " + e.getMessage());
+        }
+    }
+    
+    
+    public void setUpRoom(String cellData, char initial, BoardCell cell) {
+    	// Handle room labels and center cells
+        if (cellData.contains("X") || cellData.contains("W")) {
+        	cell.setRoom(false);
+        }
+        else{
+        	cell.setRoom(true);
+        }
+        if (cellData.contains("*")) {
+            cell.setRoomCenter(true);
+            Room room = getRoom(initial);
+            room.setCenterCell(cell);
+            centerMap.put(initial, cell);
+        }
+        if (cellData.contains("#")) {
+            cell.setRoomLabel(true);
+            Room room = getRoom(initial);
+            room.setLabelCell(cell);
+        }
+
+        if (cellData.contains("W") && cellData.length() == 1) {
+            cell.setWalk(true);
+            
+            
+        }
+
+        // Handle secret passages
+        if (cellData.length() == 2 && Character.isLetter(cellData.charAt(1))) {
+            char secondChar = cellData.charAt(1);
+            if (roomMap.containsKey(secondChar)) {
+                // If the second character is a valid room initial, it's a secret passage
+                cell.setSecretPassage(secondChar);
+            }
+            secretPassages.put(initial, secondChar);
+        }
+        
+        // Handle rooms
+        if (roomMap.containsKey(initial) && initial != 'X' && initial != 'W') {
+        	cell.setRoom(true);
+        }
+        // Handle door directions and sets the doorway boolean to true for that room cell
+        if (cellData.length() > 1 && cellData.contains("W")) {
+            char doorChar = cellData.charAt(1);
+            doors.add(cell);
+            switch (doorChar) {
+                case '^':
+                    cell.setDoorDirection(DoorDirection.UP);
+                    cell.setDoorway(true);
+           
+                    break;
+                case 'v':
+                    cell.setDoorDirection(DoorDirection.DOWN);
+                    cell.setDoorway(true);
+
+                    break;
+                case '<':
+                    cell.setDoorDirection(DoorDirection.LEFT);
+                    cell.setDoorway(true);
+
+                    break;
+                case '>':
+                    cell.setDoorDirection(DoorDirection.RIGHT);
+                    cell.setDoorway(true);
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
     
