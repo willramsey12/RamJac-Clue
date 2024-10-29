@@ -393,9 +393,8 @@ public class Board {
     public Set<BoardCell> getTargets() {
         return targets;
     }
-    
+    // returns the ajc list for a specific cell in our grid
     public Set<BoardCell> getAdjList(int row, int col){
-    	//System.out.println(grid[row][col].getAdjList());
     	return grid[row][col].getAdjList();
     }
 }
