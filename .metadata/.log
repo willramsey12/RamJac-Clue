@@ -1,0 +1,13 @@
+!SESSION 2024-10-29 10:32:59.737 -----------------------------------------------
+eclipse.buildId=4.32.0.20240606-1231
+java.version=22.0.2
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product -keyring /Users/willramsey/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -keyring /Users/willramsey/.eclipse_keyring
+
+!ENTRY ch.qos.logback.classic 1 0 2024-10-29 10:33:03.653
+!MESSAGE Activated before the state location was initialized. Retry after the state location is initialized.
+
+!ENTRY ch.qos.logback.classic 1 0 2024-10-29 10:33:31.589
+!MESSAGE Logback config file: /Users/willramsey/Desktop/School/Semester 5 - Fall 2024/Software Engineering/ClueGame/.metadata/.plugins/org.eclipse.m2e.logback/logback.2.6.1.20240411-1122.xml
