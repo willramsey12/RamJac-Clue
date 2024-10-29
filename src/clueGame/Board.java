@@ -24,7 +24,7 @@ public class Board {
     private static final int COLS = 24;
     private static final int ROWS = 25;
 
-    private String layConFile;
+    private String layoutConfig;
     private String setupConFile;
 
     private static Board theInstance = new Board();
@@ -37,7 +37,7 @@ public class Board {
     
     public void setConfigFiles(String layoutFileName, String setupFileName) {
         // Combine the relative directory and file name to create the path
-        this.layConFile = CONFIG_DIRECTORY + layoutFileName;
+        this.layoutConfig = CONFIG_DIRECTORY + layoutFileName;
         this.setupConFile = CONFIG_DIRECTORY + setupFileName;
     }
 
@@ -48,7 +48,7 @@ public class Board {
 
     // Initialize the board after setting config files
     public void initialize() throws BadConfigFormatException {
-        if (layConFile == null || setupConFile == null) {
+        if (layoutConfig == null || setupConFile == null) {
             throw new IllegalStateException("Configuration files are not set!");
         }
         
@@ -59,7 +59,7 @@ public class Board {
 
     // Load the layout configuration (e.g., ClueLayout.csv)
     public void loadLayoutConfig() throws BadConfigFormatException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(layConFile))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(layoutConfig))) {
             String line;
             int row = 0;
 
