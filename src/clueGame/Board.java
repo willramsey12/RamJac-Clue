@@ -21,7 +21,7 @@ public class Board {
     
 
 
-    private static final int COLS = 24;
+    private static final int COLS = 25;
     private static final int ROWS = 25;
 
     private String layoutConfig;
@@ -297,29 +297,31 @@ public class Board {
 
     // this function creates ajc list if the cell is a doorway
     private void doorwayAdjacency(int r, int c) {
-    	// for a door direction going left
-    	if (grid[r][c].getDoorDirection() == DoorDirection.LEFT) {
-    		Character roomInitial = grid[r][c-1].getInitial();
-    		grid[r][c].addAdjacency(centerMap.get(roomInitial));
-    		//after adding the center of the room to the ajc list, it then just calls the walkway adj func.
-    		walkAdjacency(r, c);
-    	}
-    	// for a door direction going right
-    	else if (grid[r][c].getDoorDirection() == DoorDirection.RIGHT) {
-    		Character roomInitial = grid[r][c+1].getInitial();
-    		grid[r][c].addAdjacency(centerMap.get(roomInitial));
-    		walkAdjacency(r, c);
-    	}
-    	else if (grid[r][c].getDoorDirection() == DoorDirection.UP) {
-    		Character roomInitial = grid[r-1][c].getInitial();
-    		grid[r][c].addAdjacency(centerMap.get(roomInitial));
-    		walkAdjacency(r, c);
-    	}
-    	else if (grid[r][c].getDoorDirection() == DoorDirection.DOWN) {
-    		Character roomInitial = grid[r+1][c].getInitial();
-    		grid[r][c].addAdjacency(centerMap.get(roomInitial));
-    		walkAdjacency(r, c);
-    	}
+        int roomRow = r; 
+        int roomCol = c;
+
+        // Adjust room coordinates based on door direction
+        switch (grid[r][c].getDoorDirection()) {
+            case LEFT:
+                roomCol = c - 1;
+                break;
+            case RIGHT:
+                roomCol = c + 1;
+                break;
+            case UP:
+                roomRow = r - 1;
+                break;
+            case DOWN:
+                roomRow = r + 1;
+                break;
+            default:
+        	   break;
+        }
+
+        // Add room center to adjacency list and handle walkways
+        Character roomInitial = grid[roomRow][roomCol].getInitial();
+        grid[r][c].addAdjacency(centerMap.get(roomInitial));
+        walkAdjacency(r, c);
     }
    
     // this function creats the adj list if the cell is a center of the room
