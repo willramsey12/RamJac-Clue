@@ -1,49 +1,49 @@
-*   e8b20ab Merge branch 'main' of https://github.com/willramsey12/RamJac-Clue (3 days ago) <Claytontj>
-|\  
-| * 0eddb51 changed the board initialization to work for our board instead (4 days ago) <willramsey12>
-| * dcf0b36 done with adjacency and target tests for our board and 306 board. everything works lfg (4 days ago) <willramsey12>
-| * c6889d6 Done with our boards Adjacency tests (4 days ago) <willramsey12>
-* | 886c22b fixed excel file-csv (4 days ago) <Claytontj>
-|/  
-* c4e7c44 finished with all the tests, just need to refactor now (4 days ago) <Claytontj>
-* b39d29b got somoe of the targeting tests to work (5 days ago) <Claytontj>
-*   333b8b0 merged with main (5 days ago) <willramsey12>
-|\  
-| * 1b6f05e finished the adjacency tests (5 days ago) <willramsey12>
-| | * 3e39e22 dont know why im commiting this (5 days ago) <Claytontj>
-| |/  
-| * 0cfc25a IO branch update (5 days ago) <Claytontj>
-| * bc46dbb all in board now (5 days ago) <Claytontj>
-| | * 6e5e452 merged (5 days ago) <Claytontj>
-| |/| 
-| |/  
-|/|   
-* | 0970ea7 pulling (5 days ago) <willramsey12>
-| * f42f9b2 got some other stuff to work, tests still dont work (5 days ago) <Claytontj>
-|/  
-* b8062b1 fixed some issues with assigning secret passages (5 days ago) <Claytontj>
-* 559b764 implementing logic for the tests adj and target tests (5 days ago) <willramsey12>
-* 50b1b51 finished starting the AdjTargetTests (11 days ago) <willramsey12>
-* d75afb0 comitting (11 days ago) <Claytontj>
-* ceb615d just finiched doing the tests for our own set up files (11 days ago) <Claytontj>
-| *   41015ac re pulling (11 days ago) <willramsey12>
-| |\  
-| |/  
-|/|   
-* | 5c8a809 fixed comments (11 days ago) <Claytontj>
-* | ac73032 all tests passed (11 days ago) <Claytontj>
-* | 1dc257e going to merge (11 days ago) <Claytontj>
-* | 4d3b638 Got the file init tests passed (11 days ago) <Claytontj>
-* | ebe7d09 file io tests (11 days ago) <Claytontj>
-| * e32b67e all the new tests implemented (11 days ago) <willramsey12>
-| * 018cdb5 new branch made for C15A-2 (12 days ago) <willramsey12>
-|/  
-* cd34973 changed some things arround, fixed errors in ExceptionsTests (2 weeks ago) <Claytontj>
-* aafefc7 there are errors in exceptiontests, but i havent started working on those, and im not sure i have to (2 weeks ago) <Claytontj>
-* 0981699 Got classes set up, now working on text logic (2 weeks ago) <Claytontj>
-*   cafd4e5 added the logic for calculate targets (3 weeks ago) <willramsey12>
-|\  
-| * dee4b4b got logic donw for junit tests (3 weeks ago) <Claytontj>
-* | 777c1d9 about to pull (3 weeks ago) <willramsey12>
-|/  
-* 3658c69 initial commit (3 weeks ago) <willramsey12>
+commit bf92ac3a6293ea13b300feea47c198cdaa804cb3
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:26:30 2024 -0600
+
+    changed up the structure of the doorwayAdjacency to make simpler and increase readability
+
+commit 2c9a8878963fded369e85a4ed55278653db81bd4
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:21:06 2024 -0600
+
+    changed some function names for readability
+
+commit 8e5d23923366c035b87edde3e1f80feba5226cac
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:19:35 2024 -0600
+
+    changed some variable names for read ability
+
+commit f6edab8ed3954a394ccbdaf7c4e8f16f0efc41f5
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:13:47 2024 -0600
+
+    finished with all the comments on the Board.java file
+
+commit 3d2c5821ab83b9d74f4dc7f41f619c4fe57abc56
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:11:12 2024 -0600
+
+    Changed up the entire structure of the centerRoomAdjacency function to use less repeated code, and to increase the readabilty of the function
+
+commit f29893e9a0c34ef196abc9c88d58d722ad6a7398
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:05:36 2024 -0600
+
+    merged if statements with the above one in the centerRoomAjc function to increas readability
+
+commit 6590e11eda20fafe35d3cd5b0b2daa4a7b27be1b
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 19:38:04 2024 -0600
+
+    added a new function to help with out setUpRoom function called set room, also simplified some if-else statements for read ability
+
+commit e1442ae4c929659aae755e2668d572b34d223332
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 16:32:11 2024 -0600
+
+    moved some code from loadconfigfiles to its own helper function to help readability and flow, also added soem comments
+
+
