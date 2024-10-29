@@ -95,7 +95,7 @@ public class Board {
             System.err.println("Error loading layout configuration: " + e.getMessage());
         }
     }
-    
+    // function to help with setUpRoom function, changes the cell instance variable isRoom to true if it is not a X or W
     public void setRoom(String cellData, BoardCell cell) {
     	cell.setRoom(!(cellData.contains("X") || cellData.contains("W")));
     	
@@ -110,12 +110,14 @@ public class Board {
             room.setCenterCell(cell);
             centerMap.put(initial, cell);
         }
+        //this sets the room label to true if this is where the room script will be written
         if (cellData.contains("#")) {
             cell.setRoomLabel(true);
             Room room = getRoom(initial);
             room.setLabelCell(cell);
         }
-
+        
+        // set setWalk to true if a walkway, this helps us with our ajc list further in the code
         if (cellData.contains("W") && cellData.length() == 1) {
             cell.setWalk(true);
             
@@ -167,25 +169,24 @@ public class Board {
         }
     }
     
-
-
     // Load the setup configuration
     public void loadSetupConfig() throws BadConfigFormatException {
+    	//starts reading in the file for configuring the rooms and there names
         try (BufferedReader reader = new BufferedReader(new FileReader(setupConFile))) {
             String line;
+            //makes sure next line isnt empty
             while ((line = reader.readLine()) != null) {
-                
-            	
+            	 //ignores lines commented out
             	if (line.startsWith("//") || line.trim().isEmpty()) {
                     continue;  // Skip comments and empty lines
                 }
-
+            	// starts a string that gets split at commas
                 String[] tokens = line.split(", ");
-                
+                // check if the file isnt congigured as we are expecting
                 if (tokens.length != 3) {
                     throw new BadConfigFormatException("Bad format in setup configuration: " + line);
                 }
-                
+                //sets the room name and initial and puts it in our map to be pulled from later
                 if (tokens[0].equals("Room") || tokens[0].equals("Space")) {
                     char roomInitial = tokens[2].charAt(0);  
                     String roomName = tokens[1];             
@@ -205,9 +206,11 @@ public class Board {
     // Calculate targets from a starting cell and a given path length
 	public void calcTargets(BoardCell startCell, int pathlength) {
 		//calculates legal moves from startCell a distance of pathLength away
+		// always clears the targets and visited lists so there is no bleed over from previouse calls
 		targets.clear();
 		visited.clear();
 		visited.add(startCell);
+		//calls its helper
 		calcTargetsHelper(startCell, pathlength);
 	}
 
@@ -240,12 +243,14 @@ public class Board {
 	    }
 	}
     
-    
+    // this function is a helper function for creating our ajc list, it returns the cell that is the room center for a particular room,
+	//with only the room initial given
     public BoardCell getRoomCenter(char roomInitial) {
         Room room = roomMap.get(roomInitial);
         return room != null ? room.getCenterCell() : null;
     }
 
+    //this starts initializing the ajc list for every cell on out map, becuase out grid is 2D we have to use a nested for loop
     private void initializeAdjacencyLists() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -254,6 +259,7 @@ public class Board {
         }
     }
     
+    // helper function that calls individaul functions depending on what the cell type is
     private void setAdjacencyList(BoardCell cell) {
         // adding adjacency list for a walkway
         if (cell.iswalk()) {
@@ -269,8 +275,9 @@ public class Board {
         }
     }
     
+    // this function gets called if the cell is a walkway
     private void walkAdjacency(int r, int c) {
-    	// to check cell below
+    	// to check cell above
     	if ((r+1 < ROWS - 1) && (grid[r+1][c].isDoorway() || grid[r+1][c].iswalk())) {
     		grid[r][c].addAdjacency(grid[r+1][c]);
     	}
@@ -287,12 +294,14 @@ public class Board {
     		grid[r][c].addAdjacency(grid[r][c-1]);
     	}
     }
-    
+
+    // this function creates ajc list if the cell is a doorway
     private void doorwayAdjacency(int r, int c) {
     	// for a door direction going left
     	if (grid[r][c].getDoorDirection() == DoorDirection.LEFT) {
     		Character roomInitial = grid[r][c-1].getInitial();
     		grid[r][c].addAdjacency(centerMap.get(roomInitial));
+    		//after adding the center of the room to the ajc list, it then just calls the walkway adj func.
     		walkAdjacency(r, c);
     	}
     	// for a door direction going right
@@ -312,30 +321,27 @@ public class Board {
     		walkAdjacency(r, c);
     	}
     }
-     
+   
+    // this function creats the adj list if the cell is a center of the room
     private void centerRoomAdjacency(int r, int c) {
     	for (int i = 0; i < doors.size(); i++) {
     		DoorDirection dir = doors.get(i).getDoorDirection();
-    		if (dir == DoorDirection.RIGHT) {
-    			if (grid[doors.get(i).getRow()][doors.get(i).getCol()+1].getInitial() == grid[r][c].getInitial()) {
+    		if (dir == DoorDirection.RIGHT &&  (grid[doors.get(i).getRow()][doors.get(i).getCol()+1].getInitial() == grid[r][c].getInitial()) ) {
+    				grid[r][c].addAdjacency(doors.get(i));
+    			
+    		}
+    		else if (dir == DoorDirection.LEFT && (grid[doors.get(i).getRow()][doors.get(i).getCol()-1].getInitial() == grid[r][c].getInitial())) {
+    				grid[r][c].addAdjacency(doors.get(i));
+    			
+    		}
+    		else if (dir == DoorDirection.UP && (grid[doors.get(i).getRow()-1][doors.get(i).getCol()].getInitial() == grid[r][c].getInitial())) {
+    				grid[r][c].addAdjacency(doors.get(i));
+    			
+    		}
+    		else if (dir == DoorDirection.DOWN && grid[doors.get(i).getRow()+1][doors.get(i).getCol()].getInitial() == grid[r][c].getInitial()) {
     				grid[r][c].addAdjacency(doors.get(i));
     			}
-    		}
-    		else if (dir == DoorDirection.LEFT) {
-    			if (grid[doors.get(i).getRow()][doors.get(i).getCol()-1].getInitial() == grid[r][c].getInitial()) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			}
-    		}
-    		else if (dir == DoorDirection.UP) {
-    			if (grid[doors.get(i).getRow()-1][doors.get(i).getCol()].getInitial() == grid[r][c].getInitial()) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			}
-    		}
-    		else if (dir == DoorDirection.DOWN) {
-    			if (grid[doors.get(i).getRow()+1][doors.get(i).getCol()].getInitial() == grid[r][c].getInitial()) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			}
-    		}
+    		
     	}
     	
     	
