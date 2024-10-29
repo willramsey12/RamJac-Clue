@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 public class Board {
-    private BoardCell[][] grid = new BoardCell[ROWS][COLS];
+    private BoardCell[][] grid;
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
@@ -21,8 +21,8 @@ public class Board {
     
 
 
-    private static final int COLS = 25;
-    private static final int ROWS = 25;
+    private int numCols;
+    private int numRows;
 
     private String layoutConfig;
     private String setupConFile;
@@ -61,35 +61,44 @@ public class Board {
     public void loadLayoutConfig() throws BadConfigFormatException {
         try (BufferedReader reader = new BufferedReader(new FileReader(layoutConfig))) {
             String line;
-            int row = 0;
-
+            
+            // Read the first line to determine the number of columns
+            line = reader.readLine();
+            if (line == null) {
+                throw new BadConfigFormatException("Layout configuration file is empty.");
+            }
+            
+            String[] tokens = line.split(",");
+            numCols = tokens.length;  // Set the number of columns based on the first line
+            ArrayList<String[]> layoutLines = new ArrayList<>();
+            layoutLines.add(tokens);
+            
             while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                // Check if the number of columns matches the expected number
-                if (tokens.length != COLS) {
-                	
-                    throw new BadConfigFormatException("Number of columns does not match expected value at row " + row);
+                tokens = line.split(",");
+                if (tokens.length != numCols) {
+                    throw new BadConfigFormatException("Inconsistent number of columns at line: " + layoutLines.size());
                 }
-               
-                //room validation
-                for (int col = 0; col < tokens.length; col++) {
+                layoutLines.add(tokens);
+            }
+            numRows = layoutLines.size();  // Set the number of rows based on the total lines read
+
+            // Initialize the grid with determined size
+            grid = new BoardCell[numRows][numCols];
+
+            for (int row = 0; row < numRows; row++) {
+                tokens = layoutLines.get(row);
+                for (int col = 0; col < numCols; col++) {
                     String cellData = tokens[col].trim();
                     char initial = cellData.charAt(0);
-                    
+
                     if (!roomMap.containsKey(initial)) {
                         throw new BadConfigFormatException("Room initial " + initial + " in layout not found in setup configuration.");
                     }
 
                     BoardCell cell = new BoardCell(row, col, initial);
-                    //function to set up room initial, center, if secret passage, and other thing contained in the csv file
-                    setUpRoom(cellData,  initial,  cell);
-
-          
+                    setUpRoom(cellData, initial, cell);
                     grid[row][col] = cell;
-                    
-                    
                 }
-                row++;
             }
         } catch (IOException e) {
             System.err.println("Error loading layout configuration: " + e.getMessage());
@@ -252,8 +261,8 @@ public class Board {
 
     //this starts initializing the ajc list for every cell on out map, becuase out grid is 2D we have to use a nested for loop
     private void initializeAdjacencyLists() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
                 setAjcListInitializer(grid[row][col]);
             }
         }
@@ -278,7 +287,7 @@ public class Board {
     // this function gets called if the cell is a walkway
     private void walkAdjacency(int r, int c) {
     	// to check cell above
-    	if ((r+1 < ROWS - 1) && (grid[r+1][c].isDoorway() || grid[r+1][c].iswalk())) {
+    	if ((r+1 < numRows - 1) && (grid[r+1][c].isDoorway() || grid[r+1][c].iswalk())) {
     		grid[r][c].addAdjacency(grid[r+1][c]);
     	}
     	// to check cell below
@@ -286,7 +295,7 @@ public class Board {
     		grid[r][c].addAdjacency(grid[r-1][c]);
     	}
     	// to check cell right
-    	if ((c+1 < COLS - 1) && (grid[r][c+1].isDoorway() || grid[r][c+1].iswalk())) {
+    	if ((c+1 < numCols - 1) && (grid[r][c+1].isDoorway() || grid[r][c+1].iswalk())) {
     		grid[r][c].addAdjacency(grid[r][c+1]);
     	}
     	// to check cell left
@@ -378,12 +387,12 @@ public class Board {
 
     // Get number of rows
     public int getNumRows() {
-        return ROWS;
+        return numRows;
     }
 
     // Get number of columns
     public int getNumColumns() {
-        return COLS;
+        return numCols;
     }
 
     // Get a specific cell from the board
