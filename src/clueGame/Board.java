@@ -254,13 +254,13 @@ public class Board {
     private void initializeAdjacencyLists() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                setAdjacencyList(grid[row][col]);
+                setAjcListInitializer(grid[row][col]);
             }
         }
     }
     
     // helper function that calls individaul functions depending on what the cell type is
-    private void setAdjacencyList(BoardCell cell) {
+    private void setAjcListInitializer(BoardCell cell) {
         // adding adjacency list for a walkway
         if (cell.iswalk()) {
         	walkAdjacency(cell.getRow(), cell.getCol());
