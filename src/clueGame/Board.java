@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+
 public class Board {
     private BoardCell[][] grid = new BoardCell[ROWS][COLS];
     private Set<BoardCell> targets = new HashSet<>();
@@ -95,15 +96,14 @@ public class Board {
         }
     }
     
+    public void setRoom(String cellData, BoardCell cell) {
+    	cell.setRoom(!(cellData.contains("X") || cellData.contains("W")));
+    	
+    }
     
     public void setUpRoom(String cellData, char initial, BoardCell cell) {
     	// Handle room labels and center cells
-        if (cellData.contains("X") || cellData.contains("W")) {
-        	cell.setRoom(false);
-        }
-        else{
-        	cell.setRoom(true);
-        }
+        setRoom(cellData, cell);
         if (cellData.contains("*")) {
             cell.setRoomCenter(true);
             Room room = getRoom(initial);
@@ -212,15 +212,12 @@ public class Board {
 	}
 
 	public void calcTargetsHelper(BoardCell startCell, int pathlength) {
+		//loops throuhg all the cells in the startercells ajc list 
 	    for (BoardCell adjCell : startCell.getAdjList()) {
 	        
 	        // Skip if it's already visited, unless it's an occupied room
-	        if (visited.contains(adjCell)) {
-	            continue;
-	        }
-
 	        // Skip if it's occupied and not a room
-	        if (adjCell.isOccupied() && !adjCell.isRoom()) {
+	        if ((adjCell.isOccupied() && !adjCell.isRoom()) || visited.contains(adjCell)) {
 	            continue;
 	        }
 	        
