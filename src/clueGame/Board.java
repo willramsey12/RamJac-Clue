@@ -324,23 +324,35 @@ public class Board {
    
     // this function creats the adj list if the cell is a center of the room
     private void centerRoomAdjacency(int r, int c) {
-    	for (int i = 0; i < doors.size(); i++) {
-    		DoorDirection dir = doors.get(i).getDoorDirection();
-    		if (dir == DoorDirection.RIGHT &&  (grid[doors.get(i).getRow()][doors.get(i).getCol()+1].getInitial() == grid[r][c].getInitial()) ) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			
-    		}
-    		else if (dir == DoorDirection.LEFT && (grid[doors.get(i).getRow()][doors.get(i).getCol()-1].getInitial() == grid[r][c].getInitial())) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			
-    		}
-    		else if (dir == DoorDirection.UP && (grid[doors.get(i).getRow()-1][doors.get(i).getCol()].getInitial() == grid[r][c].getInitial())) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			
-    		}
-    		else if (dir == DoorDirection.DOWN && grid[doors.get(i).getRow()+1][doors.get(i).getCol()].getInitial() == grid[r][c].getInitial()) {
-    				grid[r][c].addAdjacency(doors.get(i));
-    			}
+    	for (BoardCell door : doors) {
+    	    DoorDirection dir = door.getDoorDirection();
+    	    int doorRow = door.getRow();
+    	    int doorCol = door.getCol();
+    	    
+    	    // Calculate adjacent cell coordinates based on direction
+    	    int adjRow = doorRow; 
+    	    int adjCol = doorCol;
+    	    switch (dir) {
+    	        case RIGHT:
+    	            adjCol += 1;
+    	            break;
+    	        case LEFT:
+    	            adjCol -= 1;
+    	            break;
+    	        case UP:
+    	            adjRow -= 1;
+    	            break;
+    	        case DOWN:
+    	            adjRow += 1;
+    	            break;
+    	        default:
+    	        	break;
+    	    }
+    	    
+    	    // Check if the adjacent cell's initial matches the target cell's initial
+    	    if (grid[adjRow][adjCol].getInitial() == grid[r][c].getInitial()) {
+    	        grid[r][c].addAdjacency(door);
+    	    }
     		
     	}
     	
