@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 
 public class Board {
@@ -18,7 +19,9 @@ public class Board {
     private Map<Character, BoardCell> centerMap = new HashMap<>();
     private ArrayList<BoardCell> doors = new ArrayList<>();
     private Map<Character, Character> secretPassages = new HashMap<>();
-    
+    private ArrayList<Card> deck = new ArrayList<Card>();
+    private Solution solution = new Solution();
+    private ArrayList<Player> players = new ArrayList<>();
 
 
     private int numCols;
@@ -107,7 +110,6 @@ public class Board {
     // function to help with setUpRoom function, changes the cell instance variable isRoom to true if it is not a X or W
     public void setRoom(String cellData, BoardCell cell) {
     	cell.setRoom(!(cellData.contains("X") || cellData.contains("W")));
-    	
     }
     
     public void setUpRoom(String cellData, char initial, BoardCell cell) {
@@ -192,17 +194,73 @@ public class Board {
             	// starts a string that gets split at commas
                 String[] tokens = line.split(", ");
                 // check if the file isnt congigured as we are expecting
-                if (tokens.length != 3) {
+                if (tokens.length != 3 && tokens.length != 2 && tokens.length != 6) {
                     throw new BadConfigFormatException("Bad format in setup configuration: " + line);
                 }
                 //sets the room name and initial and puts it in our map to be pulled from later
-                if (tokens[0].equals("Room") || tokens[0].equals("Space")) {
+                if (tokens[0].equals("Room")) {
+                	// initialize room
+                    char roomInitial = tokens[2].charAt(0);  
+                    String roomName = tokens[1];             
+                    Room room = new Room();
+                    room.setName(roomName);
+                    roomMap.put(roomInitial, room);
+                    
+                    // initialize card
+                	String cardName = tokens[1];
+                	Card card = new Card();
+                	card.setCardName(cardName);
+                	card.setCardType(CardType.ROOM);
+                	deck.add(card);
+                }
+                else if (tokens[0].equals("Space")) {
+                	// initialize room
                     char roomInitial = tokens[2].charAt(0);  
                     String roomName = tokens[1];             
                     Room room = new Room();
                     room.setName(roomName);
                     roomMap.put(roomInitial, room);
                 }
+                
+                else if (tokens[0].equals("Person")){
+                	// initialize card
+                	String Name = tokens[1];
+                	Card card = new Card();
+                	card.setCardName(Name);
+                	card.setCardType(CardType.PERSON);
+                	deck.add(card);
+                	
+                	// initialize player
+                	String color = tokens[2];
+                	int row = Integer.parseInt(tokens[3]);
+                	int col = Integer.parseInt(tokens[4]);
+                	if (tokens[5].equals("COMPUTER")) {
+                		// initialize the non-human player
+                		Player player = new ComputerPlayer();
+                		player.setName(Name);
+                		player.setColor(color);
+                		player.setLocation(row, col);
+                		players.add(player);
+                	}
+                	else if (tokens[5].equals("HUMAN")){
+                		// initialize human player
+                		Player player = new HumanPlayer();
+                		player.setName(Name);
+                		player.setColor(color);
+                		player.setLocation(row, col);
+                		players.add(player);
+                	}
+              
+                }
+                else if (tokens[0].equals("Weapon")) {
+                	// initialize person card
+                	String cardName = tokens[1];
+                	Card card = new Card();
+                	card.setCardName(cardName);
+                	card.setCardType(CardType.WEAPON);
+                	deck.add(card);
+                }
+                
                 else {
                 	throw new BadConfigFormatException("Unexpected room type in setup configuration: " + tokens[0]);
                 }
@@ -374,6 +432,47 @@ public class Board {
 			  BoardCell adjCell = centerMap.get(jit); grid[r][c].addAdjacency(adjCell); }
 		 
     }
+    
+    public void setupGame(){
+    	ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
+    	// shuffle the deck
+    	Collections.shuffle(tempDeck);
+    	
+    	// get cards for solution
+    	solution.setPerson(CardSolution(tempDeck, CardType.PERSON));
+    	solution.setRoom(CardSolution(tempDeck, CardType.ROOM));
+    	solution.setWeapon(CardSolution(tempDeck, CardType.WEAPON));
+    	
+    	// deal the remaining cards to the players
+    	dealCards(tempDeck);
+    }
+    
+    // helper function to set aside one card of each type for solution
+    private Card CardSolution(ArrayList<Card> d, CardType C) {
+    	for (Card card : deck) {
+    		if (card.getCardType() == C) {
+    			d.remove(card);
+    			return card;
+    		}
+    	}
+		return null;
+    }
+    
+    private void dealCards(ArrayList<Card> d) {
+        int playerIndex = 0;
+        while (!d.isEmpty()) {
+            // Get the current player
+            Player currentPlayer = players.get(playerIndex);
+
+            // Deal one card to the current player
+            Card cardToDeal = d.remove(0); // Remove the top card from the deck
+            currentPlayer.updateHand(cardToDeal);
+
+            // Move to the next player in a round-robin fashion
+            playerIndex = (playerIndex + 1) % players.size();
+        }
+    	
+    }
 
     // Retrieve the room associated with a BoardCell
     public Room getRoom(BoardCell cell) {
@@ -408,4 +507,17 @@ public class Board {
     public Set<BoardCell> getAdjList(int row, int col){
     	return grid[row][col].getAdjList();
     }
+    
+    public ArrayList<Player> getPlayers(){
+    	return players;
+    }
+    
+    public ArrayList<Card> getDeck() {
+		return deck;
+	}
+
+	public Solution getSolution() {
+		return solution;
+	}
 }
+
