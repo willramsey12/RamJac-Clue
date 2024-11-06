@@ -100,7 +100,6 @@ public class FileInitTests306 {
 		// just test a standard room location
 		BoardCell cell = board.getCell( 23, 23);
 		Room room = board.getRoom( cell ) ;
-		System.out.println(cell);
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Kitchen" ) ;
 		assertFalse( cell.isLabel() );
