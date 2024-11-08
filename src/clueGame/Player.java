@@ -1,19 +1,51 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class Player {
 	private String name;
 	private String color;
-	private int row, col;
-	private ArrayList<Card> hand;
+	private int row;
+	private int  col;
+	private ArrayList<Card> hand = new ArrayList<>();;
 	protected boolean isHuman;
 	
-
-	public Player() {
-		// TODO Auto-generated constructor stub
-		hand = new ArrayList<Card>();
+	protected Player(String name, String color, int row, int  col, boolean isHuman) {
+		this.name = name;
+		this.color = color;
+		this.row = row;
+		this.col = col;
+		this.isHuman = isHuman;
 	}
+	protected Player() {
+	}
+	
+	public Card disproveSuggestion(Card person, Card room, Card weapon) {
+        List<Card> matchingCards = new ArrayList<>();
+
+        // Check each card in hand to see if it matches suggestion
+        for (Card card : hand) {
+            if (card.equals(person) || card.equals(room) || card.equals(weapon)) {
+                matchingCards.add(card);
+            }
+        }
+
+        // If no matching cards
+        if (matchingCards.isEmpty()) {
+            return null;
+        }
+
+        // If one matching card
+        if (matchingCards.size() == 1) {
+            return matchingCards.get(0);
+        }
+
+        // If multiple matching cards return randomly
+        Random random = new Random();
+        return matchingCards.get(random.nextInt(matchingCards.size()));
+    }
 	
 	public void updateHand(Card card) {
 		hand.add(card);

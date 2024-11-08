@@ -8,7 +8,13 @@ public class Solution {
 	private Card person;
 	private ArrayList<Card> solutionDeck = new ArrayList<>();
 	
-	Solution(){
+	public Solution() {
+	}
+	
+	public Solution(Card room, Card weapon, Card person){
+		this.room = room;
+		this.weapon = weapon;
+		this.person = person;
 	}
 	
 	public Card getRoom() {

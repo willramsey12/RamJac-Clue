@@ -26,8 +26,7 @@ public class PlayerCardTests {
         board = Board.getInstance();
         board.setConfigFiles("ClueBoardLayout.csv", "ClueSetup.txt");
         board.initialize();
-        board.setupGame();
-	}
+        }
 	
 	
 	@Test

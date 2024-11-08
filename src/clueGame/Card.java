@@ -5,12 +5,22 @@ public class Card {
 	private CardType cardType;
 
 	public Card() {
-		// TODO Auto-generated constructor stub
-	}
 	
-	public boolean equals(Card target) {
-		return true;
-		
+	}
+	public Card(String cardName, CardType cardType) {
+		this.cardName = cardName;
+		this.cardType = cardType;
+	}
+	@Override
+	public boolean equals(Object obj) {
+	    // Check if the object passed is of type Card
+	    if (this == obj) return true;
+	    if (obj == null || getClass() != obj.getClass()) return false;
+
+	    Card target = (Card) obj;
+
+	    return this.getCardType() == target.getCardType() &&
+	           this.getCardName().equals(target.getCardName());
 	}
 	
 	public void setCardName(String cN) {

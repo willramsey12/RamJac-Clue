@@ -19,8 +19,8 @@ public class Board {
     private Map<Character, BoardCell> centerMap = new HashMap<>();
     private ArrayList<BoardCell> doors = new ArrayList<>();
     private Map<Character, Character> secretPassages = new HashMap<>();
-    private ArrayList<Card> deck = new ArrayList<Card>();
-    private Solution solution = new Solution();
+    private ArrayList<Card> deck = new ArrayList<>();
+    private Solution trueSolution = new Solution();
     private ArrayList<Player> players = new ArrayList<>();
 
 
@@ -58,6 +58,7 @@ public class Board {
         loadSetupConfig();  // Load the setup configuration first
         loadLayoutConfig();
         initializeAdjacencyLists();
+        setupGame();
     }
 
     // Load the layout configuration (e.g., ClueLayout.csv)
@@ -207,10 +208,7 @@ public class Board {
                     roomMap.put(roomInitial, room);
                     
                     // initialize card
-                	String cardName = tokens[1];
-                	Card card = new Card();
-                	card.setCardName(cardName);
-                	card.setCardType(CardType.ROOM);
+                	Card card = new Card(tokens[1], CardType.ROOM);
                 	deck.add(card);
                 }
                 else if (tokens[0].equals("Space")) {
@@ -225,9 +223,7 @@ public class Board {
                 else if (tokens[0].equals("Person")){
                 	// initialize card
                 	String Name = tokens[1];
-                	Card card = new Card();
-                	card.setCardName(Name);
-                	card.setCardType(CardType.PERSON);
+                	Card card = new Card(tokens[1], CardType.PERSON);
                 	deck.add(card);
                 	
                 	// initialize player
@@ -254,10 +250,7 @@ public class Board {
                 }
                 else if (tokens[0].equals("Weapon")) {
                 	// initialize person card
-                	String cardName = tokens[1];
-                	Card card = new Card();
-                	card.setCardName(cardName);
-                	card.setCardType(CardType.WEAPON);
+                	Card card = new Card(tokens[1], CardType.WEAPON);
                 	deck.add(card);
                 }
                 
@@ -434,21 +427,21 @@ public class Board {
     }
     
     public void setupGame(){
-    	ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
+    	ArrayList<Card> tempDeck = new ArrayList<>(deck);
     	// shuffle the deck
     	Collections.shuffle(tempDeck);
     	
     	// get cards for solution
-    	solution.setPerson(CardSolution(tempDeck, CardType.PERSON));
-    	solution.setRoom(CardSolution(tempDeck, CardType.ROOM));
-    	solution.setWeapon(CardSolution(tempDeck, CardType.WEAPON));
+    	trueSolution.setPerson(cardSolution(tempDeck, CardType.PERSON));
+    	trueSolution.setRoom(cardSolution(tempDeck, CardType.ROOM));
+    	trueSolution.setWeapon(cardSolution(tempDeck, CardType.WEAPON));
     	
     	// deal the remaining cards to the players
     	dealCards(tempDeck);
     }
     
     // helper function to set aside one card of each type for solution
-    private Card CardSolution(ArrayList<Card> d, CardType C) {
+    private Card cardSolution(ArrayList<Card> d, CardType C) {
     	for (Card card : deck) {
     		if (card.getCardType() == C) {
     			d.remove(card);
@@ -473,7 +466,30 @@ public class Board {
         }
     	
     }
+    
+    public boolean checkAccusation(Card room, Card person, Card weapon) {
+        return room.equals(trueSolution.getRoom()) &&
+               person.equals(trueSolution.getPerson()) &&
+               weapon.equals(trueSolution.getWeapon());
+    }
+    
+    public Card handleSuggestion(Player suggestingPlayer, Card person, Card room, Card weapon) {
+        int startIndex = players.indexOf(suggestingPlayer);
 
+        for (int i = 1; i < players.size(); i++) {
+            Player player = players.get((startIndex + i) % players.size());
+
+            Card disproveCard = player.disproveSuggestion(person, room, weapon);
+
+            // If a card is found that can disprove the suggestion, return it
+            if (disproveCard != null) {
+                return disproveCard;
+            }
+        }
+
+        // If no players can disprove the suggestion, return null
+        return null;
+    }
     // Retrieve the room associated with a BoardCell
     public Room getRoom(BoardCell cell) {
         return roomMap.get(cell.getInitial());
@@ -517,7 +533,10 @@ public class Board {
 	}
 
 	public Solution getSolution() {
-		return solution;
+		return trueSolution;
+	}
+	public Map<Character, Room> getRoomMap(){
+		return roomMap;
 	}
 }
 
