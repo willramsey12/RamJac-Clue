@@ -6,39 +6,41 @@ import java.util.Set;
 
 public class ComputerPlayer extends Player {
 	private ArrayList<Card> seenCards;
+	public ComputerPlayer(String name, String color, int row, int  col) {
+		super(name, color, row, col, false);
+		seenCards = new ArrayList<>();
+	}
 	public ComputerPlayer() {
 		super();
-		isHuman = false;
 		seenCards = new ArrayList<>();
 	}
 	public Solution createSuggestion(Room currentRoom) {
-		Random random = new Random();
-		
-		ArrayList<Card> unseenPersons = new ArrayList<>();
-        ArrayList<Card> unseenWeapons = new ArrayList<>();
-        
-        for (Card card : this.getHand()) {
-            // Exclude cards already seen
-            if (!seenCards.contains(card)) {
-            	
-                if (card.getCardType() == CardType.PERSON) {
-                    unseenPersons.add(card);
-                    } 
-                
-                else if (card.getCardType() == CardType.WEAPON) {
-                    unseenWeapons.add(card);
-                }
-            }
-        }
-            Card suggestedPerson = unseenPersons.get(random.nextInt(unseenPersons.size()));
-            Card suggestedWeapon = unseenWeapons.get(random.nextInt(unseenWeapons.size()));
-
-            // Use the current room as the suggested room
-            Card suggestedRoom = new Card(currentRoom.getName(), CardType.ROOM);
-
-            // Return the suggestion as a Solution object
-            return new Solution(suggestedRoom, suggestedPerson, suggestedWeapon);
-        }
+	    Random random = new Random();
+	    
+	    ArrayList<Card> unseenPersons = new ArrayList<>();
+	    ArrayList<Card> unseenWeapons = new ArrayList<>();
+	    
+	    // Collect unseen persons and weapons
+	    for (Card card : this.getHand()) {
+	        if (!seenCards.contains(card)) {
+	            if (card.getCardType() == CardType.PERSON) {
+	                unseenPersons.add(card);
+	            } else if (card.getCardType() == CardType.WEAPON) {
+	                unseenWeapons.add(card);
+	            }
+	        }
+	    }
+	    
+	    // Choose random unseen person and weapon, handling cases where list might be empty
+	    Card suggestedPerson = !unseenPersons.isEmpty() ? unseenPersons.get(random.nextInt(unseenPersons.size())) : null;
+	    Card suggestedWeapon = !unseenWeapons.isEmpty() ? unseenWeapons.get(random.nextInt(unseenWeapons.size())) : null;
+	    
+	    // Retrieve the current room's card from the board configuration
+	    Card suggestedRoom = new Card(currentRoom.getName(), CardType.ROOM); // If a room card retrieval method exists, use it instead
+	    
+	    // Return the suggestion as a Solution object
+	    return new Solution(suggestedRoom, suggestedPerson, suggestedWeapon);
+	}
 
         
         
@@ -82,4 +84,11 @@ public class ComputerPlayer extends Player {
             seenCards.add(card);
         }
     }
+	public void clearSeenCards() {
+	    seenCards.clear();
+	}
+	public ArrayList<Card> getSeenCards() {
+		return seenCards;
+	}
+	
 }

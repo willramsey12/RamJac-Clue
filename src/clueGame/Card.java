@@ -38,4 +38,8 @@ public class Card {
 	public String getCardName() {
 		return cardName;
 	}
+	@Override
+	public String toString() {
+	    return "Card{name='" + cardName + "', type=" + cardType + "}";
+	}
 }

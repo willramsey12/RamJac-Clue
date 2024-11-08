@@ -9,7 +9,7 @@ public abstract class Player {
 	private String color;
 	private int row;
 	private int  col;
-	private ArrayList<Card> hand = new ArrayList<>();;
+	private ArrayList<Card> hand = new ArrayList<>();
 	protected boolean isHuman;
 	
 	protected Player(String name, String color, int row, int  col, boolean isHuman) {

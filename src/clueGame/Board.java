@@ -257,6 +257,12 @@ public class Board {
                 else {
                 	throw new BadConfigFormatException("Unexpected room type in setup configuration: " + tokens[0]);
                 }
+                
+                //System.out.println("end of deck");
+                
+            }
+            for (Card card : deck) {
+            	System.out.println(card);
             }
         } catch (IOException e) {
             System.err.println("Error loading setup configuration: " + e.getMessage());
