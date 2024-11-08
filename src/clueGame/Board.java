@@ -535,6 +535,7 @@ public class Board {
 	public Solution getSolution() {
 		return trueSolution;
 	}
+	 
 	public Map<Character, Room> getRoomMap(){
 		return roomMap;
 	}
