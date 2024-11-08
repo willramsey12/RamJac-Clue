@@ -57,6 +57,10 @@ public class ComputerAITest {
         Card roomCard = deck.get(0); 
         BoardCell cell = board.getCell(2,2);
         
+        System.out.println(hand);
+        System.out.println(comp1.getSeenCards());
+        System.out.println(comp1.createSuggestion(board.getRoomMap().get(cell.getInitial())).getPerson());
+        
         // Check if the created suggestion uses the current room, unseen person, and weapon
         assertTrue(comp1.createSuggestion(board.getRoomMap().get(cell.getInitial())).getRoom().equals(roomCard));
         assertFalse(hand.contains(comp1.createSuggestion(board.getRoomMap().get(cell.getInitial())).getPerson()));
@@ -67,18 +71,23 @@ public class ComputerAITest {
 
     @Test
     public void testNarrowDownPersonCard() {
-        comp2.addSeenCard(deck.get(9));  // Seen card
+        comp2.addSeenCard(deck.get(6));  // Seen card
         comp2.addSeenCard(deck.get(11));
-        comp2.addSeenCard(deck.get(12));
+        comp2.addSeenCard(deck.get(16));
         comp2.addSeenCard(deck.get(13));
         ArrayList<Card> hand = comp2.getHand();
+       // System.out.println(hand);
+        //System.out.println(comp2.getSeenCards());
+        
         ArrayList<Card> seenCards = comp2.getSeenCards();
 
         Card roomCard = deck.get(1);
         BoardCell cell = board.getCell(7,1);
+       // System.out.println(comp2.createSuggestion(board.getRoomMap().get(cell.getInitial())).getPerson());
         
         assertTrue(comp2.createSuggestion(board.getRoomMap().get(cell.getInitial())).getRoom().equals(roomCard));
         assertFalse(hand.contains(comp2.createSuggestion(board.getRoomMap().get(cell.getInitial())).getPerson()));
+        
         assertFalse(seenCards.contains(comp2.createSuggestion(board.getRoomMap().get(cell.getInitial())).getPerson()));
     }
 

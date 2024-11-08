@@ -262,7 +262,7 @@ public class Board {
                 
             }
             for (Card card : deck) {
-            	System.out.println(card);
+            	//System.out.println(card);
             }
         } catch (IOException e) {
             System.err.println("Error loading setup configuration: " + e.getMessage());
