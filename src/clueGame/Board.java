@@ -8,21 +8,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 
 public class Board {
-    private BoardCell[][] grid = new BoardCell[ROWS][COLS];
+    private BoardCell[][] grid;
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
     private Map<Character, Room> roomMap = new HashMap<>();
     private Map<Character, BoardCell> centerMap = new HashMap<>();
     private ArrayList<BoardCell> doors = new ArrayList<>();
     private Map<Character, Character> secretPassages = new HashMap<>();
-    
+    private ArrayList<Card> deck = new ArrayList<Card>();
+    private Solution solution = new Solution();
+    private ArrayList<Player> players = new ArrayList<>();
 
 
-    private static final int COLS = 25;
-    private static final int ROWS = 25;
+    private int numCols;
+    private int numRows;
 
     private String layoutConfig;
     private String setupConFile;
@@ -61,35 +64,44 @@ public class Board {
     public void loadLayoutConfig() throws BadConfigFormatException {
         try (BufferedReader reader = new BufferedReader(new FileReader(layoutConfig))) {
             String line;
-            int row = 0;
-
+            
+            // Read the first line to determine the number of columns
+            line = reader.readLine();
+            if (line == null) {
+                throw new BadConfigFormatException("Layout configuration file is empty.");
+            }
+            
+            String[] tokens = line.split(",");
+            numCols = tokens.length;  // Set the number of columns based on the first line
+            ArrayList<String[]> layoutLines = new ArrayList<>();
+            layoutLines.add(tokens);
+            
             while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                // Check if the number of columns matches the expected number
-                if (tokens.length != COLS) {
-                	
-                    throw new BadConfigFormatException("Number of columns does not match expected value at row " + row);
+                tokens = line.split(",");
+                if (tokens.length != numCols) {
+                    throw new BadConfigFormatException("Inconsistent number of columns at line: " + layoutLines.size());
                 }
-               
-                //room validation
-                for (int col = 0; col < tokens.length; col++) {
+                layoutLines.add(tokens);
+            }
+            numRows = layoutLines.size();  // Set the number of rows based on the total lines read
+
+            // Initialize the grid with determined size
+            grid = new BoardCell[numRows][numCols];
+
+            for (int row = 0; row < numRows; row++) {
+                tokens = layoutLines.get(row);
+                for (int col = 0; col < numCols; col++) {
                     String cellData = tokens[col].trim();
                     char initial = cellData.charAt(0);
-                    
+
                     if (!roomMap.containsKey(initial)) {
                         throw new BadConfigFormatException("Room initial " + initial + " in layout not found in setup configuration.");
                     }
 
                     BoardCell cell = new BoardCell(row, col, initial);
-                    //function to set up room initial, center, if secret passage, and other thing contained in the csv file
-                    setUpRoom(cellData,  initial,  cell);
-
-          
+                    setUpRoom(cellData, initial, cell);
                     grid[row][col] = cell;
-                    
-                    
                 }
-                row++;
             }
         } catch (IOException e) {
             System.err.println("Error loading layout configuration: " + e.getMessage());
@@ -98,7 +110,6 @@ public class Board {
     // function to help with setUpRoom function, changes the cell instance variable isRoom to true if it is not a X or W
     public void setRoom(String cellData, BoardCell cell) {
     	cell.setRoom(!(cellData.contains("X") || cellData.contains("W")));
-    	
     }
     
     public void setUpRoom(String cellData, char initial, BoardCell cell) {
@@ -183,17 +194,73 @@ public class Board {
             	// starts a string that gets split at commas
                 String[] tokens = line.split(", ");
                 // check if the file isnt congigured as we are expecting
-                if (tokens.length != 3) {
+                if (tokens.length != 3 && tokens.length != 2 && tokens.length != 6) {
                     throw new BadConfigFormatException("Bad format in setup configuration: " + line);
                 }
                 //sets the room name and initial and puts it in our map to be pulled from later
-                if (tokens[0].equals("Room") || tokens[0].equals("Space")) {
+                if (tokens[0].equals("Room")) {
+                	// initialize room
+                    char roomInitial = tokens[2].charAt(0);  
+                    String roomName = tokens[1];             
+                    Room room = new Room();
+                    room.setName(roomName);
+                    roomMap.put(roomInitial, room);
+                    
+                    // initialize card
+                	String cardName = tokens[1];
+                	Card card = new Card();
+                	card.setCardName(cardName);
+                	card.setCardType(CardType.ROOM);
+                	deck.add(card);
+                }
+                else if (tokens[0].equals("Space")) {
+                	// initialize room
                     char roomInitial = tokens[2].charAt(0);  
                     String roomName = tokens[1];             
                     Room room = new Room();
                     room.setName(roomName);
                     roomMap.put(roomInitial, room);
                 }
+                
+                else if (tokens[0].equals("Person")){
+                	// initialize card
+                	String Name = tokens[1];
+                	Card card = new Card();
+                	card.setCardName(Name);
+                	card.setCardType(CardType.PERSON);
+                	deck.add(card);
+                	
+                	// initialize player
+                	String color = tokens[2];
+                	int row = Integer.parseInt(tokens[3]);
+                	int col = Integer.parseInt(tokens[4]);
+                	if (tokens[5].equals("COMPUTER")) {
+                		// initialize the non-human player
+                		Player player = new ComputerPlayer();
+                		player.setName(Name);
+                		player.setColor(color);
+                		player.setLocation(row, col);
+                		players.add(player);
+                	}
+                	else if (tokens[5].equals("HUMAN")){
+                		// initialize human player
+                		Player player = new HumanPlayer();
+                		player.setName(Name);
+                		player.setColor(color);
+                		player.setLocation(row, col);
+                		players.add(player);
+                	}
+              
+                }
+                else if (tokens[0].equals("Weapon")) {
+                	// initialize person card
+                	String cardName = tokens[1];
+                	Card card = new Card();
+                	card.setCardName(cardName);
+                	card.setCardType(CardType.WEAPON);
+                	deck.add(card);
+                }
+                
                 else {
                 	throw new BadConfigFormatException("Unexpected room type in setup configuration: " + tokens[0]);
                 }
@@ -252,8 +319,8 @@ public class Board {
 
     //this starts initializing the ajc list for every cell on out map, becuase out grid is 2D we have to use a nested for loop
     private void initializeAdjacencyLists() {
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
                 setAjcListInitializer(grid[row][col]);
             }
         }
@@ -278,7 +345,7 @@ public class Board {
     // this function gets called if the cell is a walkway
     private void walkAdjacency(int r, int c) {
     	// to check cell above
-    	if ((r+1 < ROWS - 1) && (grid[r+1][c].isDoorway() || grid[r+1][c].iswalk())) {
+    	if ((r+1 < numRows - 1) && (grid[r+1][c].isDoorway() || grid[r+1][c].iswalk())) {
     		grid[r][c].addAdjacency(grid[r+1][c]);
     	}
     	// to check cell below
@@ -286,7 +353,7 @@ public class Board {
     		grid[r][c].addAdjacency(grid[r-1][c]);
     	}
     	// to check cell right
-    	if ((c+1 < COLS - 1) && (grid[r][c+1].isDoorway() || grid[r][c+1].iswalk())) {
+    	if ((c+1 < numCols - 1) && (grid[r][c+1].isDoorway() || grid[r][c+1].iswalk())) {
     		grid[r][c].addAdjacency(grid[r][c+1]);
     	}
     	// to check cell left
@@ -365,6 +432,47 @@ public class Board {
 			  BoardCell adjCell = centerMap.get(jit); grid[r][c].addAdjacency(adjCell); }
 		 
     }
+    
+    public void setupGame(){
+    	ArrayList<Card> tempDeck = new ArrayList<Card>(deck);
+    	// shuffle the deck
+    	Collections.shuffle(tempDeck);
+    	
+    	// get cards for solution
+    	solution.setPerson(CardSolution(tempDeck, CardType.PERSON));
+    	solution.setRoom(CardSolution(tempDeck, CardType.ROOM));
+    	solution.setWeapon(CardSolution(tempDeck, CardType.WEAPON));
+    	
+    	// deal the remaining cards to the players
+    	dealCards(tempDeck);
+    }
+    
+    // helper function to set aside one card of each type for solution
+    private Card CardSolution(ArrayList<Card> d, CardType C) {
+    	for (Card card : deck) {
+    		if (card.getCardType() == C) {
+    			d.remove(card);
+    			return card;
+    		}
+    	}
+		return null;
+    }
+    
+    private void dealCards(ArrayList<Card> d) {
+        int playerIndex = 0;
+        while (!d.isEmpty()) {
+            // Get the current player
+            Player currentPlayer = players.get(playerIndex);
+
+            // Deal one card to the current player
+            Card cardToDeal = d.remove(0); // Remove the top card from the deck
+            currentPlayer.updateHand(cardToDeal);
+
+            // Move to the next player in a round-robin fashion
+            playerIndex = (playerIndex + 1) % players.size();
+        }
+    	
+    }
 
     // Retrieve the room associated with a BoardCell
     public Room getRoom(BoardCell cell) {
@@ -378,12 +486,12 @@ public class Board {
 
     // Get number of rows
     public int getNumRows() {
-        return ROWS;
+        return numRows;
     }
 
     // Get number of columns
     public int getNumColumns() {
-        return COLS;
+        return numCols;
     }
 
     // Get a specific cell from the board
@@ -399,4 +507,17 @@ public class Board {
     public Set<BoardCell> getAdjList(int row, int col){
     	return grid[row][col].getAdjList();
     }
+    
+    public ArrayList<Player> getPlayers(){
+    	return players;
+    }
+    
+    public ArrayList<Card> getDeck() {
+		return deck;
+	}
+
+	public Solution getSolution() {
+		return solution;
+	}
 }
+

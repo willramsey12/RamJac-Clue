@@ -1,2 +1,0 @@
-I took most all of the tests from the 306 code, and just adapted the names and locations in which the tests took place.
-For example I kept all of the test room examples because they made sense, when we eventually start getting the tests to pass, then i will adapt the code more.
