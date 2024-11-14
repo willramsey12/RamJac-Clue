@@ -21,33 +21,33 @@ public class ComputerAITest {
         board.initialize();
         deck = board.getDeck();
 
-        // Initialize computer players with different names and colors
+        
         comp1 = new ComputerPlayer("Computer1", "BLUE", 1, 1);
         comp2 = new ComputerPlayer("Computer2", "GREEN", 1, 1);
         comp3 = new ComputerPlayer("Computer3", "RED", 1, 1);
         comp4 = new ComputerPlayer("Computer4", "YELLOW", 1, 1);
         comp5 = new ComputerPlayer("Computer5", "PURPLE", 1, 1);
 
-        // Set up hands for each computer player with a few cards from the deck
-        comp1.updateHand(deck.get(0));  // Room card
-        comp1.updateHand(deck.get(9));  // Person card
-        comp1.updateHand(deck.get(15)); // Weapon card
+        
+        comp1.updateHand(deck.get(0));  
+        comp1.updateHand(deck.get(9));  
+        comp1.updateHand(deck.get(15));
 
-        comp2.updateHand(deck.get(1));  // Room card
-        comp2.updateHand(deck.get(10)); // Person card
-        comp2.updateHand(deck.get(16)); // Weapon card
+        comp2.updateHand(deck.get(1));  
+        comp2.updateHand(deck.get(10)); 
+        comp2.updateHand(deck.get(16));
 
-        comp3.updateHand(deck.get(2));  // Room card
-        comp3.updateHand(deck.get(11)); // Person card
-        comp3.updateHand(deck.get(17)); // Weapon card
+        comp3.updateHand(deck.get(2));  
+        comp3.updateHand(deck.get(11)); 
+        comp3.updateHand(deck.get(17)); 
 
-        comp4.updateHand(deck.get(3));  // Room card
-        comp4.updateHand(deck.get(12)); // Person card
-        comp4.updateHand(deck.get(18)); // Weapon card
+        comp4.updateHand(deck.get(3));  
+        comp4.updateHand(deck.get(12)); 
+        comp4.updateHand(deck.get(18)); 
 
-        comp5.updateHand(deck.get(4));  // Room card
-        comp5.updateHand(deck.get(13)); // Person card
-        comp5.updateHand(deck.get(19)); // Weapon card
+        comp5.updateHand(deck.get(4));  
+        comp5.updateHand(deck.get(13)); 
+        comp5.updateHand(deck.get(19));
     }
 
     @Test

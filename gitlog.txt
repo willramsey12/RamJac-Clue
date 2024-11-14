@@ -1,0 +1,316 @@
+commit 55ea32e8ed7843a85e6ce0e2d81b553e9f8ee2f0
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Nov 8 14:00:40 2024 -0700
+
+    all tests pass
+
+commit 629d7258983ba02ebe5734abe348c91388e896ea
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Nov 8 13:13:16 2024 -0700
+
+    3/5 tests done in the second tests
+
+commit 6ed8b477a03dc1a3a655805e71097aceae15ea4b
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Nov 7 23:12:46 2024 -0700
+
+    first test done
+
+commit cddc70ff6f4deff5dce65284ef01e7c93c0e1a64
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Nov 7 21:46:33 2024 -0700
+
+    Got all functions working, going to try and make tests now
+
+commit b026ea1525e8a2611264ba4d6ee87be3d4caf3ea
+Merge: e33a459 a4e4167
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Nov 7 19:51:21 2024 -0700
+
+    Save local changes before merge
+
+commit e33a4595d2e57bee98a2c7a11fdb2d5a3c306031
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Nov 7 19:36:38 2024 -0700
+
+    making me do this
+
+commit a4e41677395f3c7bff3b69e833f63e3654dd7639
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Wed Nov 6 10:22:09 2024 -0700
+
+    finished up the assignments to resubmit
+
+commit 9a0ba017ff9db05d2762ac3b7166ab831920b3e5
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Fri Nov 1 21:50:18 2024 -0600
+
+    added the logic and passing tests for the players, cards, and solution for the game
+
+commit 84c8f57a68874a146cf32ca694c508fdfab70b7f
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Tue Oct 29 11:00:47 2024 -0600
+
+    finished redoing C15A-2
+
+commit b578c14aef741c2f900b1e2d1c99aa1156733e62
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Tue Oct 29 10:12:42 2024 -0600
+
+    directory ready for resubmitting C15A-1
+
+commit e0dc4673e1a5351776576258f56d6362f61d9bcb
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Tue Oct 29 09:59:05 2024 -0600
+
+    added logic for initializing rows and cols based on the csv file instead of hardcoding
+
+commit 850f12b63ee2ad290511174cc21c1468500c41ca
+Merge: ef16c04 5997d5e
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Mon Oct 28 20:55:38 2024 -0600
+
+    Merge remote-tracking branch 'refs/remotes/origin/main'
+
+commit 5997d5e38be98c040e67729987314d96e6243776
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:31:04 2024 -0600
+
+    for gitlog.txt
+
+commit bf92ac3a6293ea13b300feea47c198cdaa804cb3
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:26:30 2024 -0600
+
+    changed up the structure of the doorwayAdjacency to make simpler and increase readability
+
+commit 2c9a8878963fded369e85a4ed55278653db81bd4
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:21:06 2024 -0600
+
+    changed some function names for readability
+
+commit 8e5d23923366c035b87edde3e1f80feba5226cac
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:19:35 2024 -0600
+
+    changed some variable names for read ability
+
+commit f6edab8ed3954a394ccbdaf7c4e8f16f0efc41f5
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:13:47 2024 -0600
+
+    finished with all the comments on the Board.java file
+
+commit 3d2c5821ab83b9d74f4dc7f41f619c4fe57abc56
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:11:12 2024 -0600
+
+    Changed up the entire structure of the centerRoomAdjacency function to use less repeated code, and to increase the readabilty of the function
+
+commit f29893e9a0c34ef196abc9c88d58d722ad6a7398
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 20:05:36 2024 -0600
+
+    merged if statements with the above one in the centerRoomAjc function to increas readability
+
+commit 6590e11eda20fafe35d3cd5b0b2daa4a7b27be1b
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 19:38:04 2024 -0600
+
+    added a new function to help with out setUpRoom function called set room, also simplified some if-else statements for read ability
+
+commit e1442ae4c929659aae755e2668d572b34d223332
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Mon Oct 28 16:32:11 2024 -0600
+
+    moved some code from loadconfigfiles to its own helper function to help readability and flow, also added soem comments
+
+commit ef16c04f29e5396eb25c3f2ab17a247c600c0c25
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Mon Oct 28 10:17:58 2024 -0600
+
+    newest commit before starting on refactoring
+
+commit e8b20ab3be9bb0da95a8fb0fb285f08ca9ed2bb8
+Merge: 886c22b 0eddb51
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 25 08:53:11 2024 -0600
+
+    Merge branch 'main' of https://github.com/willramsey12/RamJac-Clue
+
+commit 0eddb517b256266342730d931dc97df94bb40c5c
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Fri Oct 25 00:27:06 2024 -0600
+
+    changed the board initialization to work for our board instead
+
+commit dcf0b368a7f86a17b761a96552e67d8413ae0e49
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Fri Oct 25 00:23:33 2024 -0600
+
+    done with adjacency and target tests for our board and 306 board. everything works lfg
+
+commit c6889d63eb9bb6345fc2ed4fc91008e8b29d93fb
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 24 22:57:49 2024 -0600
+
+    Done with our boards Adjacency tests
+
+commit 886c22bbadbb857155a0ae95e57bba5ad47112de
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 24 22:19:54 2024 -0600
+
+    fixed excel file-csv
+
+commit c4e7c443bfc8dba15eacce7f0b4e513c09cb80e4
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 24 12:16:07 2024 -0600
+
+    finished with all the tests, just need to refactor now
+
+commit b39d29ba08396a7fe57d367b9e1411da291d6723
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Wed Oct 23 23:54:44 2024 -0600
+
+    got somoe of the targeting tests to work
+
+commit 333b8b05683fff50c0561781fc3aa99d1b86bf2a
+Merge: 0970ea7 1b6f05e
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Wed Oct 23 23:48:17 2024 -0600
+
+    merged with main
+
+commit 1b6f05e76b9a762db2422f2ddb33faa7f11b7269
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Wed Oct 23 23:37:17 2024 -0600
+
+    finished the adjacency tests
+
+commit 0cfc25af1536bf59424c71cb79e43ca39b01751b
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Wed Oct 23 19:21:13 2024 -0600
+
+    IO branch update
+
+commit bc46dbb2dbe70ab77f24ad50d7325ad2efafa07d
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Wed Oct 23 19:10:07 2024 -0600
+
+    all in board now
+
+commit f42f9b268c872a941a25dfdfa4a59a135bd6d979
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Wed Oct 23 12:39:52 2024 -0600
+
+    got some other stuff to work, tests still dont work
+
+commit 0970ea70462744d9815abcf5d39d4346ce80e18c
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Wed Oct 23 12:00:31 2024 -0600
+
+    pulling
+
+commit b8062b108c476ac1816fb72c9fa99bc576b70662
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Wed Oct 23 11:59:47 2024 -0600
+
+    fixed some issues with assigning secret passages
+
+commit 559b764602484d9cf103813c5b6cf7cf080b4d5a
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Wed Oct 23 10:06:30 2024 -0600
+
+    implementing logic for the tests adj and target tests
+
+commit 50b1b51c2e9bccc8f7e4283ad7858bd2d7a67f3f
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 17 23:46:46 2024 -0600
+
+    finished starting the AdjTargetTests
+
+commit d75afb06f27faa9092caa9c568eb73467dae2b35
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 23:31:04 2024 -0600
+
+    comitting
+
+commit ceb615da85098794b2ffa9fe9b67dec6eb1a7f46
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 23:02:15 2024 -0600
+
+    just finiched doing the tests for our own set up files
+
+commit 5c8a809db7b1e5c3b7e7a59f8a4b7ef114bfea2f
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 22:25:34 2024 -0600
+
+    fixed comments
+
+commit ac730323484762ff3bfd5dd384ccc6478ab0567b
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 22:23:05 2024 -0600
+
+    all tests passed
+
+commit 1dc257e3a67ccd8d896353fe183827615918d2bf
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 22:19:06 2024 -0600
+
+    going to merge
+
+commit 4d3b638e28736aa164cca1b3ca08a0fbdb0dc60a
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 22:01:29 2024 -0600
+
+    Got the file init tests passed
+
+commit ebe7d09362797f73696bb3a8b54fbe1cb78a4bc1
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 17 13:19:55 2024 -0600
+
+    file io tests
+
+commit cd34973f5ae0c8944af943caa8559b0c52bcee4e
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 11 19:54:20 2024 -0600
+
+    changed some things arround, fixed errors in ExceptionsTests
+
+commit aafefc7bd43d2647a0a5d103e3458ceed3150bf3
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 11 19:52:20 2024 -0600
+
+    there are errors in exceptiontests, but i havent started working on those, and im not sure i have to
+
+commit 09816995a5db58816e5d408e4ae0d13ae5eea90c
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Fri Oct 11 19:04:07 2024 -0600
+
+    Got classes set up, now working on text logic
+
+commit cafd4e562282b3b8b3806d1c8fe45f48668892de
+Merge: 777c1d9 dee4b4b
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 10 13:33:53 2024 -0600
+
+    added the logic for calculate targets
+
+commit 777c1d9717ef2a82c71d1d7c03104eff839542a1
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 10 13:22:20 2024 -0600
+
+    about to pull
+
+commit dee4b4b7624c99bc13879b333e77abbb74e8dc19
+Author: Claytontj <36046564+Claytontj@users.noreply.github.com>
+Date:   Thu Oct 10 13:17:48 2024 -0600
+
+    got logic donw for junit tests
+
+commit 3658c695dee3dab2e63fef4a0efe0dfbcabe3e30
+Author: willramsey12 <willramsey12@gmail.com>
+Date:   Thu Oct 10 12:47:54 2024 -0600
+
+    initial commit
