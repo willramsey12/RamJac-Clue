@@ -2,7 +2,8 @@ package clueGame;
 
 import java.util.HashSet;
 import java.util.Set;
-
+import java.awt.Graphics;
+import java.awt.Color;
 public class BoardCell {
     // Row and column variables
     private int row;
@@ -20,6 +21,11 @@ public class BoardCell {
     private boolean isDoorway;
     private boolean roomLabel;
     private boolean roomCenter;
+    private Color cellColor;
+    
+    
+
+    
     
 
     // Adjacency List
@@ -31,6 +37,27 @@ public class BoardCell {
         this.col = colNum;
         this.initial = init;
     }
+    
+    public void draw(Graphics g, int cellSize, Color color) {
+        // Calculate the position based on the cell's row and column
+        int x = col * cellSize;
+        int y = row * cellSize;
+
+        // Set the color for the cell and fill it
+        g.setColor(color);
+        g.fillRect(x, y, cellSize, cellSize);
+
+        // Draw the cell border
+        if (this.isRoom) {
+        
+        	g.setColor(Color.LIGHT_GRAY);
+        	
+        }
+        else {
+        	g.setColor(Color.BLACK);
+        }
+        g.drawRect(x, y, cellSize, cellSize);
+    }
 
     // Add a cell to the adjacency list
     public void addAdjacency(BoardCell cell) {
@@ -41,6 +68,14 @@ public class BoardCell {
     // Getter for adjList
     public Set<BoardCell> getAdjList() {
         return adjList;
+    }
+    
+    public void setColor(Color color) {
+    	this.cellColor = color;
+    }
+    
+    public Color getColor() {
+    	return cellColor;
     }
 
     // Getters and setters for row and column

@@ -9,9 +9,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collections;
+import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.util.ArrayList;
 
-
-public class Board {
+public class Board extends JPanel {
     private BoardCell[][] grid;
     private Set<BoardCell> targets = new HashSet<>();
     private Set<BoardCell> visited = new HashSet<>();
@@ -73,7 +76,8 @@ public class Board {
             }
             
             String[] tokens = line.split(",");
-            numCols = tokens.length;  // Set the number of columns based on the first line
+            numCols = tokens.length;// Set the number of columns based on the first line
+            System.out.println(numCols);
             ArrayList<String[]> layoutLines = new ArrayList<>();
             layoutLines.add(tokens);
             
@@ -84,7 +88,8 @@ public class Board {
                 }
                 layoutLines.add(tokens);
             }
-            numRows = layoutLines.size();  // Set the number of rows based on the total lines read
+            numRows = layoutLines.size();
+            System.out.println(numRows);// Set the number of rows based on the total lines read
 
             // Initialize the grid with determined size
             grid = new BoardCell[numRows][numCols];
@@ -496,7 +501,80 @@ public class Board {
         // If no players can disprove the suggestion, return null
         return null;
     }
-    // Retrieve the room associated with a BoardCell
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Determine cell size based on panel size and number of rows/columns
+        int rectLength = getHeight() / numRows;
+        int rectWidth = getWidth() / numCols;
+        int size = Math.min(rectLength, rectWidth); // Set cell size to smallest dimension
+
+        // Draw each cell in the grid based on its type
+        for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
+            for (int drawColNum = 0; drawColNum < numCols; drawColNum++) {
+                BoardCell currCell = grid[drawRowNum][drawColNum];
+
+                // Draw cell background based on cell type
+                if (currCell.getInitial() == 'W') {
+                    currCell.draw(g, size, Color.YELLOW);  // Walkway cells
+                } else if (currCell.getInitial() == 'X') {
+                    currCell.draw(g, size, Color.BLACK);   // Unreachable areas
+                } else {
+                    currCell.draw(g, size, Color.LIGHT_GRAY);  // Rooms
+                }
+            }
+        }
+
+        // Highlight target cells
+//        for (BoardCell target : targets) {
+//            target.draw(g, size, Color.CYAN);  // Highlighted color for targets
+//            if (target.isRoomCenter()) {
+//                // Draw room cells as highlighted if the target cell is a room center
+//                Room room = roomMap.get(target.getInitial());
+//                for (BoardCell roomCell : room.getRoomCells()) {
+//                    roomCell.draw(g, size, Color.CYAN);
+//                }
+//            }
+//        }
+
+        // Draw overlays for doorways and room names
+//        for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
+//            for (int drawColNum = 0; drawColNum < numCols; drawColNum++) {
+//                grid[drawRowNum][drawColNum].drawOverlay(g, size);
+//            }
+//        }
+
+        // Draw players on the board
+//        ArrayList<BoardCell> playerLocation = new ArrayList<>();
+//        for (int playerIndex = 0; playerIndex < playerList.size(); playerIndex++) {
+//            Player player = playerList.get(playerIndex);
+//            BoardCell playerCell = grid[player.getRow()][player.getCol()];
+//            playerLocation.add(playerCell);
+//
+//            // Offset if multiple players are in the same cell
+//            int offset = 0;
+//            for (int i = 0; i < playerIndex; i++) {
+//                if (playerLocation.get(i).equals(playerLocation.get(playerIndex))) {
+//                    offset++;
+//                }
+//            }
+//            player.draw(g, size, offset);
+//        }
+    }
+    
+    public void drawRoomNames(Graphics g, int cellWidth, int cellHeight) {
+        g.setColor(Color.BLACK);
+        for (Room room : roomMap.values()) {
+            BoardCell labelCell = room.getLabelCell();
+            if (labelCell != null) {
+                int x = labelCell.getCol() * cellWidth ;
+                int y = labelCell.getRow() * cellHeight ;
+                g.drawString(room.getName(), x, y);
+            }
+        }
+    }
     public Room getRoom(BoardCell cell) {
         return roomMap.get(cell.getInitial());
     }

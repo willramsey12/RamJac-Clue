@@ -9,7 +9,7 @@ public class Card {
 	}
 	public Card(String cardName, CardType cardType) {
 		this.cardName = cardName;
-		this.cardType = cardType;	
+		this.cardType = cardType;
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -29,10 +29,6 @@ public class Card {
 
 	public CardType getCardType() {
 		return cardType;
-	}
-	
-	public String getCardTypeStr() {
-		return cardType.getType();
 	}
 
 	public void setCardType(CardType cT) {

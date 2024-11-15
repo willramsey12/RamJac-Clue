@@ -9,17 +9,20 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
 public class GameControlPanel extends JPanel {
-	private JButton nextPlayerButton;
+    private JButton nextPlayerButton;
     private JButton accusationButton;
     private JTextField dieRollField;
     private JTextField turnField;
     private JTextField guessField;
     private JTextField guessResultField;
 
+    // Static instance for the singleton pattern
+    private static GameControlPanel controlPanel = new GameControlPanel();
 
-    public GameControlPanel() {
+    // Private constructor to prevent external instantiation
+    private GameControlPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Vertical layout for main panel
-        
+
         // --- Top Panel (1x4) ---
         JPanel topPanel = new JPanel(new GridLayout(1, 4));
 
@@ -72,34 +75,38 @@ public class GameControlPanel extends JPanel {
         // Add bottomPanel to main panel
         add(bottomPanel);
     }
-    
-	public void setTurn(ComputerPlayer computerPlayer, Integer i) {
-		// TODO Auto-generated method stub
-		turnField.setText(computerPlayer.getName());
-		dieRollField.setText(Integer.toString(i));
-	}
-	
-	public void setGuess(String guess) {
-		guessField.setText(guess);
-	}
-	
-	public void setGuessResult(String result) {
-		guessResultField.setText(result);
-	}
+
+    // Public static method to provide access to the single instance
+    public static GameControlPanel getInstance() {
+        return controlPanel;
+    }
+
+    public void setTurn(Player player, Integer i) {
+        turnField.setText(player.getName());
+        dieRollField.setText(Integer.toString(i));
+    }
+
+    public void setGuess(String guess) {
+        guessField.setText(guess);
+    }
+
+    public void setGuessResult(String result) {
+        guessResultField.setText(result);
+    }
 
     // Test main method to run this panel independently
     public static void main(String[] args) {
         JFrame frame = new JFrame("Clue Game Control");
-        GameControlPanel panel = new GameControlPanel();
-        
+        GameControlPanel panel = GameControlPanel.getInstance(); // Use the singleton instance
+
         frame.setContentPane(panel);
         frame.setSize(750, 180);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-		// test filling in the data
-		panel.setTurn(new ComputerPlayer( "Col. Mustard", "orange", 0, 0), 5);
-		panel.setGuess( "I have no guess!");
-		panel.setGuessResult( "So you have nothing?");
-    }
 
+        // Test filling in the data
+        panel.setTurn(new ComputerPlayer("Col. Mustard", "orange", 0, 0), 5);
+        panel.setGuess("I have no guess!");
+        panel.setGuessResult("So you have nothing?");
+    }
 }
