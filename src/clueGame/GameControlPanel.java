@@ -2,9 +2,13 @@ package clueGame;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
@@ -45,6 +49,13 @@ public class GameControlPanel extends JPanel {
         // Button 1: "Next Player"
         nextPlayerButton = new JButton("Next Player");
         topPanel.add(nextPlayerButton);
+        nextPlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Logic to execute when button is clicked
+                JOptionPane.showMessageDialog(null, "Football!"); // Show message dialog
+            }
+        });
 
         // Button 2: "Make an Accusation"
         accusationButton = new JButton("Make an Accusation");
