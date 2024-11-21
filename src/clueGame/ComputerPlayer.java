@@ -105,4 +105,19 @@ public Solution createSuggestion(Room currentRoom) {
 		return seenCards;
 	}
 	
+	public void updatePosition() {
+		// Get the current player's position
+	    BoardCell currentCell = board.getCell(getRow(), getCol());
+
+	    // Calculate the available targets for the player
+	    board.calcTargets(currentCell, board.getRoll());
+	    Set<BoardCell> targets = board.getTargets();
+
+	    // Select a target
+	    BoardCell selectedTarget = selectTarget(targets);
+
+	    // Update the computer player's position to the selected target
+	    setLocation(selectedTarget.getRow(), selectedTarget.getCol());
+	}
+	
 }

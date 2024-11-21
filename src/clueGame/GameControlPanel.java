@@ -22,6 +22,7 @@ public class GameControlPanel extends JPanel {
     private JTextField guessField;
     private JTextField guessResultField;
     private Board board;
+    private BoardPanel boardPanel;
 
     // Static instance for the singleton pattern
     private static GameControlPanel controlPanel = new GameControlPanel();
@@ -29,6 +30,7 @@ public class GameControlPanel extends JPanel {
     // Private constructor to prevent external instantiation
     private GameControlPanel() {
     	board = Board.getInstance();
+    	boardPanel = BoardPanel.getInstance();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Vertical layout for main panel
 
         // --- Top Panel (1x4) ---
@@ -60,11 +62,20 @@ public class GameControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Logic to execute when button is clicked
+            	if (board.getCurrentPlayer().isHuman && !boardPanel.getActionTaken()) {
+            		JOptionPane.showMessageDialog(null, "You need to move before going to the next player.", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+            		return;
+            	}
                 board.diceRoll();
                 board.nextPlayer();
                 BoardPanel.getInstance().setActionTaken(false);
                 updateControlPanel();
                 BoardPanel.getInstance().repaint();
+                
+                if (!board.getCurrentPlayer().isHuman) {
+                	board.getCurrentPlayer().updatePosition();
+                }
             }
         });
 

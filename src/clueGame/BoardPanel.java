@@ -164,6 +164,10 @@ public class BoardPanel extends JPanel {
     	System.out.println("action flipped to false");    
     	}
     
+    public boolean getActionTaken() {
+    	return actionTaken;
+    }
+    
     
     
 }

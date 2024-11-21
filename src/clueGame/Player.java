@@ -24,6 +24,7 @@ public abstract class Player {
 	protected Player() {
 	}
 	
+	
 	public Card disproveSuggestion(Card person, Card room, Card weapon) {
         List<Card> matchingCards = new ArrayList<>();
 
@@ -123,5 +124,6 @@ public abstract class Player {
 	    g.setColor(Color.BLACK); // Text color
 	    
 	}
+	protected abstract void updatePosition();
 
 }
