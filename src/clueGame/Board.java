@@ -12,6 +12,7 @@ import java.util.Collections;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 
 public class Board extends JPanel {
@@ -566,12 +567,21 @@ public class Board extends JPanel {
     
     public void drawRoomNames(Graphics g, int cellWidth, int cellHeight) {
         g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.PLAIN, cellHeight/2)); 
+
         for (Room room : roomMap.values()) {
             BoardCell labelCell = room.getLabelCell();
             if (labelCell != null) {
-                int x = labelCell.getCol() * cellWidth ;
-                int y = labelCell.getRow() * cellHeight ;
-                g.drawString(room.getName(), x, y);
+                int x = labelCell.getCol() * cellWidth;
+                int y = labelCell.getRow() * cellHeight;
+
+                // Split the room name into words
+                String[] words = room.getName().split(" ");
+
+                // Draw each word, adjusting the y-coordinate for subsequent words
+                for (int i = 0; i < words.length; i++) {
+                    g.drawString(words[i], x, y + (i * g.getFontMetrics().getHeight()));
+                }
             }
         }
     }
