@@ -1,5 +1,8 @@
 package clueGame;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+
 import java.awt.BorderLayout;
 
 public class ClueGame extends JFrame {
@@ -25,8 +28,12 @@ public class ClueGame extends JFrame {
     }
 
     public static void main(String[] args) throws BadConfigFormatException {
+
     	
+        ImageIcon icon = new ImageIcon("data/skyrim.png");
+
         ClueGame game = new ClueGame();
         game.setVisible(true);
+        JOptionPane.showMessageDialog(null,"You are Golden Paladin\nCan you find the solution of the murder first?" ,"Welcome to Clue!", JOptionPane.INFORMATION_MESSAGE, icon);
     }
 }
