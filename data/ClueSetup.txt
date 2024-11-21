@@ -9,12 +9,12 @@ Room, Gravewatch Bastion, G
 Room, Abyssal Vault, A
 Space, Walkway, W
 Space, Unused, X
-Person, Silver Paladin, Silver, 13, 5, HUMAN
-Person, Obsidian Dragonborn, Purple, 0, 9, COMPUTER
+Person, Silver Paladin, Silver, 18, 0, HUMAN
+Person, Obsidian Dragon, Purple, 0, 9, COMPUTER
 Person, Ashen Knight, Red, 0, 15, COMPUTER
-Person, Ivory Swordsmith, White, 24, 4, COMPUTER
-Person, Emerald Hunter, Green, 24, 19, COMPUTER
 Person, Umber Thief, Brown, 20, 24, COMPUTER
+Person, Emerald Hunter, Green, 24, 19, COMPUTER
+Person, Ivory Swordsmith, White, 24, 4, COMPUTER
 Weapon, Longbow
 Weapon, Axe
 Weapon, Dagger

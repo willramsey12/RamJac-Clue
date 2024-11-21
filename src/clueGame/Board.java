@@ -28,9 +28,11 @@ public class Board extends JPanel {
     private Solution trueSolution = new Solution();
     private ArrayList<Player> players = new ArrayList<>();
     private int roll;
+    private Player currentPlayer;
 
 
-    private int numCols;
+
+	private int numCols;
     private int numRows;
 
     private String layoutConfig;
@@ -452,6 +454,12 @@ public class Board extends JPanel {
     	
     	// deal the remaining cards to the players
     	dealCards(tempDeck);
+    	
+    	// initialize dice roll
+    	diceRoll();
+    	
+    	// set initial current player to the human
+    	currentPlayer = players.get(0);
     }
     
     // helper function to set aside one card of each type for solution
@@ -564,6 +572,18 @@ public class Board extends JPanel {
             }
         }
     }
+    
+    public void nextPlayer() {
+    	// Find the index of the current player
+        int currentIndex = players.indexOf(currentPlayer);
+        // Update to the next player (loop back to 0 if at the end of the list)
+        int nextIndex = (currentIndex + 1) % players.size();
+        currentPlayer = players.get(nextIndex);   	
+    }
+    
+    public Player getCurrentPlayer() {
+    	return currentPlayer;
+    }
     public Room getRoom(BoardCell cell) {
         return roomMap.get(cell.getInitial());
     }
@@ -622,6 +642,10 @@ public class Board extends JPanel {
 	 
 	public Map<Character, Room> getRoomMap(){
 		return roomMap;
+	}
+	
+	public String getCurrentPlayerLocation() {
+		return "row " + currentPlayer.getRow() + "column " + currentPlayer.getCol();
 	}
 }
 

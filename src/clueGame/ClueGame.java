@@ -17,7 +17,7 @@ public class ClueGame extends JFrame {
         
         
         // Initialize the main game components
-        BoardPanel boardPanel = new BoardPanel();  // The game board
+        BoardPanel boardPanel = BoardPanel.getInstance();  // The game board
         GameControlPanel controlPanel = GameControlPanel.getInstance();  
         CardsPanel cardsPanel = new CardsPanel();  // Shows known cards
 
@@ -32,9 +32,10 @@ public class ClueGame extends JFrame {
 
     	
         ImageIcon icon = new ImageIcon("data/skyrim.png");
-
         ClueGame game = new ClueGame();
         game.setVisible(true);
+        Board board = Board.getInstance();
+        System.out.println(board.getPlayers());
         JOptionPane.showMessageDialog(null,"You are Golden Paladin\nCan you find the solution of the murder first?" ,"Welcome to Clue!", JOptionPane.INFORMATION_MESSAGE, icon);
     }
 }

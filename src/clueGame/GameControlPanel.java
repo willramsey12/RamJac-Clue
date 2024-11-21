@@ -5,6 +5,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,12 +21,14 @@ public class GameControlPanel extends JPanel {
     private JTextField turnField;
     private JTextField guessField;
     private JTextField guessResultField;
+    private Board board;
 
     // Static instance for the singleton pattern
     private static GameControlPanel controlPanel = new GameControlPanel();
 
     // Private constructor to prevent external instantiation
     private GameControlPanel() {
+    	board = Board.getInstance();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Vertical layout for main panel
 
         // --- Top Panel (1x4) ---
@@ -35,6 +39,7 @@ public class GameControlPanel extends JPanel {
         diePanel.add(new JLabel("Roll: "));
         dieRollField = new JTextField(5);
         dieRollField.setEditable(false);
+        dieRollField.setText(Integer.toString(board.getRoll()));
         diePanel.add(dieRollField);
         topPanel.add(diePanel);
 
@@ -43,8 +48,10 @@ public class GameControlPanel extends JPanel {
         turnPanel.add(new JLabel("Turn: "));
         turnField = new JTextField(10);
         turnField.setEditable(false);
+        turnField.setPreferredSize(new Dimension(500, 30));
         turnPanel.add(turnField);
         topPanel.add(turnPanel);
+        turnField.setText(board.getCurrentPlayer().getName());
 
         // Button 1: "Next Player"
         nextPlayerButton = new JButton("Next Player");
@@ -53,7 +60,11 @@ public class GameControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Logic to execute when button is clicked
-                JOptionPane.showMessageDialog(null, "Football!"); // Show message dialog
+                board.diceRoll();
+                board.nextPlayer();
+                BoardPanel.getInstance().setActionTaken(false);
+                updateControlPanel();
+                BoardPanel.getInstance().repaint();
             }
         });
 
@@ -103,6 +114,11 @@ public class GameControlPanel extends JPanel {
 
     public void setGuessResult(String result) {
         guessResultField.setText(result);
+    }
+    
+    public void updateControlPanel() {
+    	dieRollField.setText(Integer.toString(board.getRoll()));
+    	turnField.setText(board.getCurrentPlayer().getName());
     }
 
     // Test main method to run this panel independently
