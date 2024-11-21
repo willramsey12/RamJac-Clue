@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Collections;
 import javax.swing.JPanel;
@@ -26,6 +27,7 @@ public class Board extends JPanel {
     private ArrayList<Card> deck = new ArrayList<>();
     private Solution trueSolution = new Solution();
     private ArrayList<Player> players = new ArrayList<>();
+    private int roll;
 
 
     private int numCols;
@@ -565,7 +567,13 @@ public class Board extends JPanel {
     public Room getRoom(BoardCell cell) {
         return roomMap.get(cell.getInitial());
     }
-
+    public void diceRoll() {
+    	Random random = new Random(); // Create a Random object
+        roll = random.nextInt(6) + 1;
+    }
+    public int getRoll() {
+    	return roll;
+    }
     // Retrieve the room based on a character initial
     public Room getRoom(char c) {
         return roomMap.get(c);
@@ -587,7 +595,12 @@ public class Board extends JPanel {
     }
 
     // Get the set of calculated targets
+    public Set<BoardCell> getTargetsForBoard(BoardCell startCell, int pathlength) {
+    	calcTargets(startCell,  pathlength);
+        return targets;
+    }
     public Set<BoardCell> getTargets() {
+    	
         return targets;
     }
     // returns the ajc list for a specific cell in our grid
