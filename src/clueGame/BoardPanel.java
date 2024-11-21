@@ -42,6 +42,10 @@ public class BoardPanel extends JPanel {
 
         // Draw the room names
         board.drawRoomNames(g, cellSize, cellSize); // Use cellSize for both width and height
+        for (Player player : board.getPlayers()) {
+            player.draw(g, cellSize);
+        }
     }
+    
 }
 

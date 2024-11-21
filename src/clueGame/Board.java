@@ -503,32 +503,9 @@ public class Board extends JPanel {
         return null;
     }
     
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+   
 
-        // Determine cell size based on panel size and number of rows/columns
-        int rectLength = getHeight() / numRows;
-        int rectWidth = getWidth() / numCols;
-        int size = Math.min(rectLength, rectWidth); // Set cell size to smallest dimension
-
-        // Draw each cell in the grid based on its type
-        for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
-            for (int drawColNum = 0; drawColNum < numCols; drawColNum++) {
-                BoardCell currCell = grid[drawRowNum][drawColNum];
-
-                // Draw cell background based on cell type
-                if (currCell.getInitial() == 'W') {
-                    currCell.draw(g, size, Color.YELLOW);  // Walkway cells
-                } else if (currCell.getInitial() == 'X') {
-                    currCell.draw(g, size, Color.BLACK);   // Unreachable areas
-                } else {
-                    currCell.draw(g, size, Color.LIGHT_GRAY);  // Rooms
-                }
-            }
-        }
-
-        // Highlight target cells
+        
 //        for (BoardCell target : targets) {
 //            target.draw(g, size, Color.CYAN);  // Highlighted color for targets
 //            if (target.isRoomCenter()) {
@@ -563,7 +540,7 @@ public class Board extends JPanel {
 //            }
 //            player.draw(g, size, offset);
 //        }
-    }
+    
     
     public void drawRoomNames(Graphics g, int cellWidth, int cellHeight) {
         g.setColor(Color.BLACK);

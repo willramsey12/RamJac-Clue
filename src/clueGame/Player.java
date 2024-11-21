@@ -1,5 +1,7 @@
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -86,6 +88,40 @@ public abstract class Player {
 	
 	public boolean isHuman() {
 		return isHuman;
+	}
+	private Color getColorFromName(String colorName) {
+	    return switch (colorName.toLowerCase()) {
+	        case "silver" -> new Color(192, 192, 192);
+	        case "purple" -> new Color(128, 0, 128); // RGB for purple
+	        case "red" -> Color.RED;
+	        case "green" -> Color.GREEN;
+	        case "brown" -> new Color(139, 69, 19); // RGB for brown
+	        case "white" -> Color.WHITE;
+	        default -> Color.LIGHT_GRAY; // Default color for unexpected input
+	    };
+	}
+	
+	public void draw(Graphics g, int cellSize) {
+	    // Convert the color string to an actual Color object
+	    Color playerColor = getColorFromName(color);
+
+	    // Set the drawing color
+	    g.setColor(playerColor);
+
+	    // Calculate the top-left corner of the circle based on row and col
+	    int x = col * cellSize;
+	    int y = row * cellSize;
+
+	    // Draw the circle (slightly smaller than the cell to fit nicely inside)
+	    int circleSize = (int) (cellSize * 0.8); // Circle is 80% of the cell size
+	    int xOffset = (cellSize - circleSize) / 2; // Center the circle horizontally
+	    int yOffset = (cellSize - circleSize) / 2; // Center the circle vertically
+
+	    g.fillOval(x + xOffset, y + yOffset, circleSize, circleSize);
+
+	    // Optionally draw the player's initials or name inside the circle
+	    g.setColor(Color.BLACK); // Text color
+	    
 	}
 
 }

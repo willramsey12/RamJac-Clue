@@ -25,6 +25,7 @@ public class ClueGame extends JFrame {
         add(boardPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.SOUTH);
         add(cardsPanel, BorderLayout.EAST);
+        
     }
 
     public static void main(String[] args) throws BadConfigFormatException {
