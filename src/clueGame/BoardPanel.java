@@ -1,5 +1,6 @@
 package clueGame;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -91,6 +92,8 @@ public class BoardPanel extends JPanel {
     private void processClickedCell(BoardCell clickedCell) {
         if (actionTaken) {
             System.out.println("Action already taken for this turn!");
+            JOptionPane.showMessageDialog(null, "You already moved for your turn.", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return; // Ignore the click
         }
 
@@ -114,8 +117,12 @@ public class BoardPanel extends JPanel {
             setActionTaken(true);
         } else if (!currentPlayer.isHuman()) {
         	System.out.println("Invalid move! Not your player");
+        	JOptionPane.showMessageDialog(null, "Not your turn", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             System.out.println("Invalid move! Cell is not a target.");
+            JOptionPane.showMessageDialog(null, "You rolled a " +board.getRoll()+ ". You can only move to highlighted spots", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

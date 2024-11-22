@@ -30,16 +30,15 @@ public class CardsPanel extends JPanel {
         	for (Card card : board.getCurrentPlayer().getHand()) {
         		if (card.getCardType() == CardType.PERSON) {
                     peoplePanel = createPanel(card);
+                    add(peoplePanel);
         		} else if (card.getCardType() == CardType.ROOM) {
                     roomPanel = createPanel(card);
+                    add(roomPanel);
         		} else {
         			weaponPanel = createPanel(card);
+        			add(weaponPanel);
         		}
         	}
-            // Add all panels to the main layout
-            add(peoplePanel);
-            add(roomPanel);
-            add(weaponPanel);
         }
     }
 
