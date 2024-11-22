@@ -40,6 +40,7 @@ public class Board extends JPanel {
 
     private static Board theInstance = new Board();
     private static final String CONFIG_DIRECTORY = "data/";
+    private Board board;
 
     // Private constructor to enforce singleton pattern
     private Board() {
@@ -571,6 +572,42 @@ public class Board extends JPanel {
                 }
             }
         }
+    }
+    
+    public void drawDoorway(Graphics g, int cellWidth, int cellHeight) {
+    	g.setColor(Color.BLACK);
+    	board = Board.getInstance();
+    	
+    	for (int row = 0; row < board.getNumRows(); row++) {
+            for (int col = 0; col < board.getNumColumns(); col++) {
+                BoardCell cell = board.getCell(row, col);
+                if (cell.getDoorDirection() == DoorDirection.UP) {
+                    int x = cell.getCol()*cellWidth;
+                    int y = cell.getRow()*cellHeight;
+                    g.fillRect(x, y, cellWidth, cellHeight/8);
+                	g.drawRect(x, y, cellWidth, cellHeight/8);
+                }
+                if (cell.getDoorDirection() == DoorDirection.DOWN) {
+                    int x = cell.getCol()*cellWidth;
+                    int y = (cell.getRow()+1)*cellHeight;
+                	g.fillRect(x, y, cellWidth, cellHeight/8);
+                	g.drawRect(x, y, cellWidth, cellHeight/8);
+                }
+                if (cell.getDoorDirection() == DoorDirection.RIGHT) {
+                    int x = (cell.getCol()+1)*cellWidth;
+                    int y = cell.getRow()*cellHeight;
+                	g.fillRect(x, y, cellWidth/8, cellHeight);
+                	g.drawRect(x, y, cellWidth/8, cellHeight);
+                	
+                }
+                if (cell.getDoorDirection() == DoorDirection.LEFT) {
+                    int x = (cell.getCol())*cellWidth;
+                    int y = (cell.getRow())*cellHeight;
+                	g.fillRect(x, y, cellWidth/8, cellHeight);
+                	g.drawRect(x, y, cellWidth/8, cellHeight);
+                }
+            }
+    	}
     }
     
     public void nextPlayer() {

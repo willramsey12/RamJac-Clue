@@ -142,7 +142,6 @@ public class BoardPanel extends JPanel {
                 } else {
                     cellColor = Color.LIGHT_GRAY; // Room
                 }
-
                 // Use the draw method of the BoardCell class
                 cell.draw(g, cellSize, cellColor);
             }
@@ -150,6 +149,8 @@ public class BoardPanel extends JPanel {
 
         // Draw the room names
         board.drawRoomNames(g, cellSize, cellSize); // Use cellSize for both width and height
+        // Draw the walkways
+        board.drawDoorway(g, cellSize, cellSize);
         
         for (Player player : board.getPlayers()) {
             player.draw(g, cellSize);
@@ -160,8 +161,7 @@ public class BoardPanel extends JPanel {
     }
     
     public void setActionTaken(boolean b){
-    	actionTaken = b;
-    	System.out.println("action flipped to false");    
+    	actionTaken = b;  
     	}
     
     public boolean getActionTaken() {

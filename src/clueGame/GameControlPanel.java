@@ -132,19 +132,19 @@ public class GameControlPanel extends JPanel {
     	turnField.setText(board.getCurrentPlayer().getName());
     }
 
-    // Test main method to run this panel independently
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Clue Game Control");
-        GameControlPanel panel = GameControlPanel.getInstance(); // Use the singleton instance
-
-        frame.setContentPane(panel);
-        frame.setSize(750, 180);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        // Test filling in the data
-        panel.setTurn(new ComputerPlayer("Col. Mustard", "orange", 0, 0), 5);
-        panel.setGuess("I have no guess!");
-        panel.setGuessResult("So you have nothing?");
-    }
+//    // Test main method to run this panel independently
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame("Clue Game Control");
+//        GameControlPanel panel = GameControlPanel.getInstance(); // Use the singleton instance
+//
+//        frame.setContentPane(panel);
+//        frame.setSize(750, 180);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setVisible(true);
+//
+//        // Test filling in the data
+//        panel.setTurn(new ComputerPlayer("Col. Mustard", "orange", 0, 0), 5);
+//        panel.setGuess("I have no guess!");
+//        panel.setGuessResult("So you have nothing?");
+//    }
 }
