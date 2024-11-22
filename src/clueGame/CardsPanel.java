@@ -11,19 +11,36 @@ public class CardsPanel extends JPanel {
     private JPanel peopleSeenPanel;
     private JPanel roomSeenPanel;
     private JPanel weaponSeenPanel;
+    private static CardsPanel cardsPanel = new CardsPanel();
+    private Board board;
+    
+    
+    
+    // Public static method to provide access to the single instance
+    public static CardsPanel getInstance() {
+        return cardsPanel;
+    }
 
     public CardsPanel() {
+    	board = Board.getInstance();
         setLayout(new GridLayout(3, 1)); // Three main sections for people, rooms, and weapons
 
         // Set up each main panel with hand and seen sub-panels
-        peoplePanel = createPanel(new Card("Colonel Mustard", CardType.PERSON));
-        roomPanel = createPanel(new Card("Library", CardType.ROOM));
-        weaponPanel = createPanel(new Card("Knife", CardType.WEAPON));
-
-        // Add all panels to the main layout
-        add(peoplePanel);
-        add(roomPanel);
-        add(weaponPanel);
+        if (board.getCurrentPlayer().isHuman) {
+        	for (Card card : board.getCurrentPlayer().getHand()) {
+        		if (card.getCardType() == CardType.PERSON) {
+                    peoplePanel = createPanel(card);
+        		} else if (card.getCardType() == CardType.ROOM) {
+                    roomPanel = createPanel(card);
+        		} else {
+        			weaponPanel = createPanel(card);
+        		}
+        	}
+            // Add all panels to the main layout
+            add(peoplePanel);
+            add(roomPanel);
+            add(weaponPanel);
+        }
     }
 
     // Helper method to create each section panel

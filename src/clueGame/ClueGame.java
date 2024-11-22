@@ -11,7 +11,7 @@ public class ClueGame extends JFrame {
     	Board board = Board.getInstance();
         board.setConfigFiles("ClueBoardLayout.csv", "ClueSetup.txt");
         board.initialize();
-        setTitle("Clue Game - CSC1306");
+        setTitle("Clue Game - CSCI306");
         setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -20,7 +20,7 @@ public class ClueGame extends JFrame {
         // Initialize the main game components
         BoardPanel boardPanel = BoardPanel.getInstance();  // The game board
         GameControlPanel controlPanel = GameControlPanel.getInstance();  
-        CardsPanel cardsPanel = new CardsPanel();  // Shows known cards
+        CardsPanel cardsPanel = CardsPanel.getInstance();  // Shows known cards
 
         // Add components to the main layout
         add(boardPanel, BorderLayout.CENTER);
