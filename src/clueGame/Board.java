@@ -491,9 +491,9 @@ public class Board extends JPanel {
     }
     
     public boolean checkAccusation(Card room, Card person, Card weapon) {
-        return room.equals(trueSolution.getRoom()) &&
-               person.equals(trueSolution.getPerson()) &&
-               weapon.equals(trueSolution.getWeapon());
+        return (room).equals(trueSolution.getRoom()) &&
+               (person).equals(trueSolution.getPerson()) &&
+               (weapon).equals(trueSolution.getWeapon());
     }
     
     public Card handleSuggestion(Player suggestingPlayer, Card person, Card room, Card weapon) {

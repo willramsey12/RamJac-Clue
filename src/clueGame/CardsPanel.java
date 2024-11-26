@@ -24,7 +24,7 @@ public class CardsPanel extends JPanel {
     public CardsPanel() {
     	board = Board.getInstance();
         setLayout(new GridLayout(3, 1)); // Three main sections for people, rooms, and weapons
-
+        JFrame frame = new JFrame("Player Cards");
         // Set up each main panel with hand and seen sub-panels
         if (board.getCurrentPlayer().isHuman) {
         	for (Card card : board.getCurrentPlayer().getHand()) {
@@ -87,15 +87,5 @@ public class CardsPanel extends JPanel {
 
         revalidate(); // Refresh layout to show the new field
         repaint(); // Redraw panel to display the new field
-    }
-
-    // Test main method to display the panel and simulate adding seen cards
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Player Cards");
-        CardsPanel panel = new CardsPanel();
-        frame.setContentPane(panel);
-        frame.setSize(300, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
     }
 }

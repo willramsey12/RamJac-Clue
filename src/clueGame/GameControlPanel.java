@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class GameControlPanel extends JPanel {
     private JButton nextPlayerButton;
@@ -23,6 +24,7 @@ public class GameControlPanel extends JPanel {
     private JTextField guessResultField;
     private Board board;
     private BoardPanel boardPanel;
+    private CardsPanel cardsPanel;
 
     // Static instance for the singleton pattern
     private static GameControlPanel controlPanel = new GameControlPanel();
@@ -31,6 +33,7 @@ public class GameControlPanel extends JPanel {
     private GameControlPanel() {
     	board = Board.getInstance();
     	boardPanel = BoardPanel.getInstance();
+    	cardsPanel = CardsPanel.getInstance();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Vertical layout for main panel
 
         // --- Top Panel (1x4) ---
@@ -72,15 +75,81 @@ public class GameControlPanel extends JPanel {
                 BoardPanel.getInstance().setActionTaken(false);
                 updateControlPanel();
                 BoardPanel.getInstance().repaint();
-                
                 if (!board.getCurrentPlayer().isHuman) {
                 	board.getCurrentPlayer().updatePosition();
                 }
+                cardsPanel.addSeenCard(new Card("Himmy", CardType.PERSON));
             }
         });
 
         // Button 2: "Make an Accusation"
         accusationButton = new JButton("Make an Accusation");
+        accusationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Ensure only the human player can make an accusation
+                if (!board.getCurrentPlayer().isHuman) {
+                    JOptionPane.showMessageDialog(null, "Only the human player can make an accusation!", 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Create dropdowns for the accusation
+                JComboBox<Card> personDropdown = new JComboBox<>();
+                JComboBox<Card> roomDropdown = new JComboBox<>();
+                JComboBox<Card> weaponDropdown = new JComboBox<>();
+
+                // Populate the dropdowns with cards from the deck
+                for (Card card : board.getDeck()) {
+                    switch (card.getCardType()) {
+                        case PERSON:
+                            personDropdown.addItem(card);
+                            break;
+                        case ROOM:
+                            roomDropdown.addItem(card);
+                            break;
+                        case WEAPON:
+                            weaponDropdown.addItem(card);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // Add components to a JPanel
+                JPanel accusationPanel = new JPanel();
+                accusationPanel.setLayout(new BoxLayout(accusationPanel, BoxLayout.Y_AXIS));
+                accusationPanel.add(new JLabel("Select Person:"));
+                accusationPanel.add(personDropdown);
+                accusationPanel.add(new JLabel("Select Room:"));
+                accusationPanel.add(roomDropdown);
+                accusationPanel.add(new JLabel("Select Weapon:"));
+                accusationPanel.add(weaponDropdown);
+
+                // Show the dialog
+                int result = JOptionPane.showConfirmDialog(null, accusationPanel, 
+                        "Make Your Accusation", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                // If the player presses OK
+                if (result == JOptionPane.OK_OPTION) {
+                    // Retrieve selected cards
+                    Card person = (Card) personDropdown.getSelectedItem();
+                    Card room = (Card) roomDropdown.getSelectedItem();
+                    Card weapon = (Card) weaponDropdown.getSelectedItem();
+
+                    // Check the accusation against the true solution
+                    if (board.checkAccusation(room, person, weapon)) {
+                        JOptionPane.showMessageDialog(null, "Congratulations! You made the correct accusation and won the game!", 
+                                "Victory", JOptionPane.INFORMATION_MESSAGE);
+                        System.exit(0); // End the game
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Sorry, your accusation was incorrect. You lose!", 
+                                "Defeat", JOptionPane.INFORMATION_MESSAGE);
+                        System.exit(0); // End the game
+                    }
+                }
+            }
+        });
         topPanel.add(accusationButton);
 
         // Add topPanel to main panel
