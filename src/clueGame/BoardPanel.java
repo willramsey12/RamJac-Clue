@@ -113,6 +113,7 @@ public class BoardPanel extends JPanel {
             currentPlayer.setLocation(clickedCell.getRow(), clickedCell.getCol());
             System.out.println("row " + Integer.toString(currentPlayer.getRow()) + " col " + Integer.toString(currentPlayer.getCol()));
             board.calcTargets(clickedCell, board.getRoll()); // Update targets from the new position
+            Player.resetDrawCounts();
             repaint(); // Redraw the board to reflect changes
             // Mark action as taken
             setActionTaken(true);
@@ -209,11 +210,11 @@ public class BoardPanel extends JPanel {
                 // Determine the cell color based on its type
                 Color cellColor;
                 if (cell.getInitial() == 'W') {
-                    cellColor = Color.YELLOW; // Walkway
+                    cellColor = new Color(112, 128, 144); // Walkway
                 } else if (cell.getInitial() == 'X') {
                     cellColor = Color.BLACK; // Inaccessible area
                 } else {
-                    cellColor = Color.LIGHT_GRAY; // Room
+                    cellColor = new Color(184, 134, 11); // Room
                 }
                 // Use the draw method of the BoardCell class
                 cell.draw(g, cellSize, cellColor);

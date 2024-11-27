@@ -3,16 +3,20 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public abstract class Player {
+	private static Map<String, Integer> drawCounts = new HashMap<>();
 	private String name;
 	private String color;
 	private int row;
 	private int  col;
 	private ArrayList<Card> hand = new ArrayList<>();
 	protected boolean isHuman;
+	private Board board = Board.getInstance();
 	
 	protected Player(String name, String color, int row, int  col, boolean isHuman) {
 		this.name = name;
@@ -92,7 +96,7 @@ public abstract class Player {
 	}
 	private Color getColorFromName(String colorName) {
 	    return switch (colorName.toLowerCase()) {
-	        case "silver" -> new Color(192, 192, 192);
+	        case "silver" -> new Color(255, 215, 0);
 	        case "purple" -> new Color(128, 0, 128); // RGB for purple
 	        case "red" -> Color.RED;
 	        case "green" -> Color.GREEN;
@@ -103,27 +107,51 @@ public abstract class Player {
 	}
 	
 	public void draw(Graphics g, int cellSize) {
-	    // Convert the color string to an actual Color object
-	    Color playerColor = getColorFromName(color);
+        // Convert the color string to an actual Color object
+        Color playerColor = getColorFromName(color);
 
-	    // Set the drawing color
-	    g.setColor(playerColor);
+        // Set the drawing color
+        g.setColor(playerColor);
 
-	    // Calculate the top-left corner of the circle based on row and col
-	    int x = col * cellSize;
-	    int y = row * cellSize;
+        // Calculate the top-left corner of the circle based on row and col
+        int x = col * cellSize;
+        int y = row * cellSize;
 
-	    // Draw the circle (slightly smaller than the cell to fit nicely inside)
-	    int circleSize = (int) (cellSize * 0.8); // Circle is 80% of the cell size
-	    int xOffset = (cellSize - circleSize) / 2; // Center the circle horizontally
-	    int yOffset = (cellSize - circleSize) / 2; // Center the circle vertically
+        // Circle size and offsets
+        int circleSize = (int) (cellSize * 0.8); // Circle is 80% of the cell size
+        int xOffset = (cellSize - circleSize) / 2; // Center the circle horizontally
+        int yOffset = (cellSize - circleSize) / 2; // Center the circle vertically
 
-	    g.fillOval(x + xOffset, y + yOffset, circleSize, circleSize);
+        // Create a unique key for the cell
+        String cellKey = row + "," + col;
 
-	    // Optionally draw the player's initials or name inside the circle
-	    g.setColor(Color.BLACK); // Text color
-	    
-	}
+        // Get the current draw count for this cell (default to 0 if no players have been drawn yet)
+        int drawIndex = drawCounts.getOrDefault(cellKey, 0);
+
+        // Update the draw count for this cell
+        drawCounts.put(cellKey, drawIndex + 1);
+
+        // Calculate offset based on drawIndex
+        int offset = (int) (circleSize * 0.25); // 25% of circle size as spacing
+        int adjustedX = x + xOffset + (drawIndex % 2) * offset; // Alternate left and right
+        int adjustedY = y + yOffset + (drawIndex / 2) * offset; // Stack vertically for 3rd+ players
+
+        // Draw the player's circle with calculated offsets
+        if (board.getCell(row, col).isRoom()) {
+        	g.fillOval(adjustedX, adjustedY, circleSize, circleSize);
+        } else {
+        	g.fillOval(adjustedX, adjustedY, circleSize, circleSize);
+        }
+
+        // Optionally draw the player's initials or name inside the circle
+        g.setColor(Color.BLACK); // Text color
+        // Example: g.drawString("P", adjustedX + circleSize / 4, adjustedY + circleSize / 2);
+    }
+	
+	public static void resetDrawCounts() {
+        drawCounts.clear();
+    }
+	
 	protected abstract void updatePosition();
 
-}
+	}

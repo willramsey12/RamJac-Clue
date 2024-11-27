@@ -74,6 +74,7 @@ public class GameControlPanel extends JPanel {
                 board.nextPlayer();
                 BoardPanel.getInstance().setActionTaken(false);
                 updateControlPanel();
+                Player.resetDrawCounts();
                 BoardPanel.getInstance().repaint();
                 if (!board.getCurrentPlayer().isHuman) {
                 	board.getCurrentPlayer().updatePosition();
@@ -183,9 +184,7 @@ public class GameControlPanel extends JPanel {
 
         // Check if the computer player ends in a room
         BoardCell currentCell = board.getCell(currentPlayer.getRow(), currentPlayer.getCol());
-        System.out.println(currentCell);
         if (currentCell.isRoom()) {
-        	System.out.println("in a room");
             Solution suggestion = currentPlayer.createSuggestion(board.getRoom(currentCell));
             Card room = suggestion.getRoom();
             Card person = suggestion.getPerson();
