@@ -42,5 +42,10 @@ public class Solution {
 		return solutionDeck;
 	}
 	
+	@Override
+	public String toString() {
+		return "Room: " + this.room + " Weapon: " + this.weapon + " Person: " + this.person;
+	}
+	
 
 }

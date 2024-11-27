@@ -1,8 +1,13 @@
 package clueGame;
 
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.Color;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +24,6 @@ public class BoardPanel extends JPanel {
         return boardPanel;
     }
     
-
     private BoardPanel() {
         this.board = Board.getInstance();  // Assuming Board is a singleton
         // Add MouseListener to detect clicks
@@ -42,9 +46,7 @@ public class BoardPanel extends JPanel {
             public void mouseExited(MouseEvent e) {}
         });
     }
-    
-    
-    
+      
     private void drawAdjacentCells(Graphics g, Player player, int cellSize) {
         g.setColor(new Color(64, 224, 208)); // Turquoise color
 
@@ -112,9 +114,75 @@ public class BoardPanel extends JPanel {
             System.out.println("row " + Integer.toString(currentPlayer.getRow()) + " col " + Integer.toString(currentPlayer.getCol()));
             board.calcTargets(clickedCell, board.getRoll()); // Update targets from the new position
             repaint(); // Redraw the board to reflect changes
-
             // Mark action as taken
             setActionTaken(true);
+            if (clickedCell.isRoom()) {
+            	// Get the current room
+            	Card room = null;
+                BoardCell currentCell = board.getCell(currentPlayer.getRow(), currentPlayer.getCol());
+                Room currentRoom = board.getRoom(currentCell);
+                String currentRoomName = currentRoom.getName();
+            	JPanel suggestionPanel = new JPanel();
+            	for (Card c : board.getDeck()) {
+            		if (currentRoomName.equals(c.getCardName())) {
+            			room = c;
+            		}
+            	}
+            	suggestionPanel.setLayout(new GridLayout(0, 2, 10, 10)); // Two columns, dynamic rows, 10px spacing
+
+                // Add the current room (non-editable)
+                JLabel roomLabel = new JLabel("Room: " + currentRoomName);
+                suggestionPanel.add(roomLabel);
+
+                // Dropdowns for suspect and weapon
+                JComboBox<Card> suspectDropdown = new JComboBox<>();
+                JComboBox<Card> weaponDropdown = new JComboBox<>();
+
+                // Populate the dropdowns with cards
+                for (Card card : board.getDeck()) {
+                    if (card.getCardType() == CardType.PERSON) {
+                        suspectDropdown.addItem(card);
+                    } else if (card.getCardType() == CardType.WEAPON) {
+                        weaponDropdown.addItem(card);
+                    }
+                }
+
+                suggestionPanel.add(new JLabel("Suspect:"));
+                suggestionPanel.add(suspectDropdown);
+                suggestionPanel.add(new JLabel("Weapon:"));
+                suggestionPanel.add(weaponDropdown);
+
+                // Show the suggestion dialog
+                int result = JOptionPane.showConfirmDialog(null, suggestionPanel,
+                        "Make a Suggestion", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    // Retrieve the selected cards
+                    Card suspect = (Card) suspectDropdown.getSelectedItem();
+                    Card weapon = (Card) weaponDropdown.getSelectedItem();
+                    
+                    // Move suspect into the room
+                    for (Player player : board.getPlayers()) {
+                        if (player.getName().equals(suspect.getCardName())) {
+                            player.setLocation(clickedCell.getRow(), clickedCell.getCol());
+                        }
+                        // Process the suggestion
+                        Card disprovingCard = board.handleSuggestion(currentPlayer, suspect, room, weapon);
+
+                        // Update Guess Panel
+                        GameControlPanel.getInstance().setGuess(suspect.getCardName() + " with " + weapon.getCardName() + " in the " + room.getCardName());
+
+                        // Update Result Panel and Seen Cards
+                        if (disprovingCard != null) {
+                            GameControlPanel.getInstance().setGuessResult("Disproved by: " + disprovingCard.getCardName());
+                            CardsPanel.getInstance().addSeenCard(disprovingCard);
+                        } else {
+                            GameControlPanel.getInstance().setGuessResult("No one could disprove.");
+                        }
+                    }
+                }
+                repaint();
+            }
         } else if (!currentPlayer.isHuman()) {
         	System.out.println("Invalid move! Not your player");
         	JOptionPane.showMessageDialog(null, "Not your turn", 
@@ -125,9 +193,7 @@ public class BoardPanel extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
-  
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

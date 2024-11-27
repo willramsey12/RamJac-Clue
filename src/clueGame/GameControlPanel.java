@@ -77,8 +77,8 @@ public class GameControlPanel extends JPanel {
                 BoardPanel.getInstance().repaint();
                 if (!board.getCurrentPlayer().isHuman) {
                 	board.getCurrentPlayer().updatePosition();
+                	handleComputerTurn();
                 }
-                cardsPanel.addSeenCard(new Card("Himmy", CardType.PERSON));
             }
         });
 
@@ -89,7 +89,7 @@ public class GameControlPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Ensure only the human player can make an accusation
                 if (!board.getCurrentPlayer().isHuman) {
-                    JOptionPane.showMessageDialog(null, "Only the human player can make an accusation!", 
+                    JOptionPane.showMessageDialog(null, "You must wait for your turn to make an accusation.", 
                             "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -143,7 +143,7 @@ public class GameControlPanel extends JPanel {
                                 "Victory", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0); // End the game
                     } else {
-                        JOptionPane.showMessageDialog(null, "Sorry, your accusation was incorrect. You lose!", 
+                        JOptionPane.showMessageDialog(null, "Sorry, your accusation was incorrect. The correct answer was " + board.getSolution() + " You lose!", 
                                 "Defeat", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0); // End the game
                     }
@@ -161,7 +161,7 @@ public class GameControlPanel extends JPanel {
         // Sub-panel 3: for displaying guess
         JPanel guessPanel = new JPanel();
         guessPanel.add(new JLabel("Guess: "));
-        guessField = new JTextField(20);
+        guessField = new JTextField(27);
         guessField.setEditable(false);
         guessPanel.add(guessField);
         bottomPanel.add(guessPanel);
@@ -177,6 +177,38 @@ public class GameControlPanel extends JPanel {
         // Add bottomPanel to main panel
         add(bottomPanel);
     }
+    
+    private void handleComputerTurn() {
+        ComputerPlayer currentPlayer = (ComputerPlayer) board.getCurrentPlayer();
+
+        // Check if the computer player ends in a room
+        BoardCell currentCell = board.getCell(currentPlayer.getRow(), currentPlayer.getCol());
+        System.out.println(currentCell);
+        if (currentCell.isRoom()) {
+        	System.out.println("in a room");
+            Solution suggestion = currentPlayer.createSuggestion(board.getRoom(currentCell));
+            Card room = suggestion.getRoom();
+            Card person = suggestion.getPerson();
+            Card weapon = suggestion.getWeapon();
+            
+            // Process the suggestion
+            Card disprovingCard = board.handleSuggestion(currentPlayer, person, room, weapon);
+
+            // Update the game panels
+            GameControlPanel.getInstance().setGuess(
+                suggestion.getWeapon().getCardName() + " with " +
+                suggestion.getPerson().getCardName() + " in the " +
+                suggestion.getRoom().getCardName()
+            );
+            if (disprovingCard != null) {
+                GameControlPanel.getInstance().setGuessResult("Disproved by: " + disprovingCard.getCardName());
+            } else {
+                GameControlPanel.getInstance().setGuessResult("No one could disprove.");
+            }
+            
+        }
+    }
+
 
     // Public static method to provide access to the single instance
     public static GameControlPanel getInstance() {

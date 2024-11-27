@@ -465,7 +465,8 @@ public class Board extends JPanel {
     
     // helper function to set aside one card of each type for solution
     private Card cardSolution(ArrayList<Card> d, CardType C) {
-    	for (Card card : deck) {
+    	
+    	for (Card card : d) {
     		if (card.getCardType() == C) {
     			d.remove(card);
     			return card;
