@@ -7,7 +7,6 @@ import java.util.Set;
 public class ComputerPlayer extends Player {
 	private ArrayList<Card> seenCards;
 	Board board = Board.getInstance();
-;	
 public ComputerPlayer(String name, String color, int row, int  col) {
 		super(name, color, row, col, false);
 		seenCards = new ArrayList<>();
@@ -22,7 +21,8 @@ public ComputerPlayer() {
 
 public Solution createSuggestion(Room currentRoom) {
 	    Random random = new Random();
-	    
+	    Card suggestedRoom = null;
+	    Player player = null;
 	    ArrayList<Card> unseenPersons = new ArrayList<>();
 	    ArrayList<Card> unseenWeapons = new ArrayList<>();
 	    
@@ -46,8 +46,19 @@ public Solution createSuggestion(Room currentRoom) {
 	    Card suggestedPerson = !unseenPersons.isEmpty() ? unseenPersons.get(random.nextInt(unseenPersons.size())) : null;
 	    Card suggestedWeapon = !unseenWeapons.isEmpty() ? unseenWeapons.get(random.nextInt(unseenWeapons.size())) : null;
 	    
-	    // Retrieve the current room's card from the board configuration
-	    Card suggestedRoom = new Card(currentRoom.getName(), CardType.ROOM); 
+	    for (Card card : board.getDeck()) {
+	    	if (currentRoom.getName() == card.getCardName()) {
+	    		suggestedRoom = card;
+	    	}
+	    }
+	    
+	    for (Player p : board.getPlayers()) {
+	    	if (p.getName() == suggestedPerson.getCardName()) {
+	    		player = p;
+	    	}
+	    }
+	    
+	    player.setLocation(board.getCurrentPlayer().getRow(), board.getCurrentPlayer().getCol());
 	    
 	    // Return the suggestion as a Solution object
 	    return new Solution(suggestedRoom, suggestedPerson, suggestedWeapon);
