@@ -182,6 +182,7 @@ public class BoardPanel extends JPanel {
                         }
                     }
                 }
+                Player.resetDrawCounts();
                 repaint();
             }
         } else if (!currentPlayer.isHuman()) {
